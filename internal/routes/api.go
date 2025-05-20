@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine {
 
 		api.POST("/client/add", handlers.AddClient)
 		api.GET("/client/get", handlers.GetClient)
-		api.DELETE("/user/delete", handlers.DeleteClient)
+		api.DELETE("/client/delete", handlers.DeleteClient)
 		api.PUT("/client/update", handlers.UpdateClient) // Méthode PUT pour les mises à jour
 
 		api.POST("/boutique/add", handlers.AddBoutique)
