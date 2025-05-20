@@ -1,7 +1,7 @@
 package storage
 
 
-func AddUser(firstName string, lastName string){
+func AddUser(firstName string, lastName string) error {
 	var count int
     err := DB.QueryRow("SELECT * FROM users WHERE firstName = $1 AND lastname = $2", firstName, lastName).Scan(&count)
 
