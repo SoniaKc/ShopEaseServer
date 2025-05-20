@@ -1,7 +1,15 @@
 package handlers
 
+import (
+	"net/http"
+    "shop-ease-server/internal/models"
+    "shop-ease-server/internal/storage"
+
+    "github.com/gin-gonic/gin"
+)
+
 func CreateUser(c *gin.Context){
-	var req models.CreateUserRequest
+	var req models.AddUserRequest
     if err := c.ShouldBindJSON(&req); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
         return

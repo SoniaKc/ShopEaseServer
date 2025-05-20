@@ -15,7 +15,6 @@ func SetupRouter() *gin.Engine {
     api := router.Group("/api")
     {
         api.HEAD("/health", handlers.HealthCheck)
-
         /*
 		api.GET("/admin/users", middleware.AdminAuth(), handlers.GetAllUsers)
         api.DELETE("/admin/del_table", middleware.AdminAuth(), handlers.DeleteTable)
