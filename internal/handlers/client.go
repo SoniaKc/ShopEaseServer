@@ -68,16 +68,16 @@ func UpdateClient(c *gin.Context) {
 		updates["nom"] = req.Nom
 	}
 	if req.Prenom != "" {
-		updates["prenom"] = req.Nom
+		updates["prenom"] = req.Prenom
 	}
 	if req.Email != "" {
-		updates["email"] = req.Password
+		updates["email"] = req.Email
 	}
 	if req.DateNaissance != "" {
-		updates["date_naissance"] = req.Nom
+		updates["date_naissance"] = req.DateNaissance
 	}
 	if req.Telephone != "" {
-		updates["telephone"] = req.Nom
+		updates["telephone"] = req.Telephone
 	}
 
 	err := storage.UpdateClient(req.Login, updates)

@@ -79,8 +79,27 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 	params := []interface{}{}
 	i := 1
 
+	allowedFields := map[string]bool{
+		"password":       true,
+		"nom":            true,
+		"prenom":         true,
+		"email":          true,
+		"date_naissance": true,
+		"telephone":      true,
+	}
+
 	for field, value := range updates {
-		if value == nil || value == "" {
+		if !allowedFields[field] {
+			continue
+		}
+
+		// Vérifie spécifiquement pour les chaînes vides
+		if strVal, ok := value.(string); ok && strVal == "" {
+			continue
+		}
+
+		// Vérifie pour les valeurs nil
+		if value == nil {
 			continue
 		}
 		query += fmt.Sprintf("%s = $%d, ", field, i)
