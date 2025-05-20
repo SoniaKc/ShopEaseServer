@@ -90,6 +90,9 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 	params = append(params, login)
 
 	fmt.Printf("Generated SQL: %s\n", query)
+	for i, param := range params {
+		fmt.Printf("$%d = %v (type: %T)\n", i+1, param, param)
+	}
 
 	result, err := DB.Exec(query, params...)
 	if err != nil {
