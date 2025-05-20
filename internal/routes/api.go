@@ -22,10 +22,17 @@ func SetupRouter() *gin.Engine {
 			        api.GET("/user/forgetPswrd", handlers.ForgetPswrd)
 		*/
 
-		api.POST("/user/add", handlers.AddClient)
+		api.POST("/client/add", handlers.AddClient)
+		api.GET("/client/get", handlers.GetClient)
+		api.DELETE("/user/delete", handlers.DeleteClient)
+		api.PUT("/client/update", handlers.UpdateClient) // Méthode PUT pour les mises à jour
+
 		api.POST("/boutique/add", handlers.AddBoutique)
+
 		api.POST("/parametre/add", handlers.AddParametre)
+
 		api.POST("/paiement/add", handlers.AddPaiement)
+
 		api.POST("/adresse/add", handlers.AddAdresse)
 
 		/*
