@@ -6,12 +6,12 @@ import (
 	"fmt"
 )
 
-func AddUser(firstName string, lastName string) error {
+func AddClient(login string, password string, nom string, prenom string, email string, date_naissance string, telephone string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM users WHERE firstName = $1 AND lastname = $2", firstName, lastName).Scan(&count)
+	err := DB.QueryRow("SELECT * FROM clients WHERE login = $1 AND email = $2", login, email).Scan(&count)
 
 	if err == sql.ErrNoRows {
-		_, errInsert := DB.Exec("INSERT INTO users (firstName, lastName) VALUES ($1, $2)", firstName, lastName)
+		_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)", login, password, nom, prenom, email, date_naissance, telephone)
 		return errInsert
 	}
 
@@ -19,8 +19,8 @@ func AddUser(firstName string, lastName string) error {
 		return fmt.Errorf("error while checking users: %v", err)
 	}
 	if count > 0 {
-		return errors.New("user already exist")
+		return errors.New("user already exist, or email already used")
 	}
-	_, errInsert := DB.Exec("INSERT INTO users (firstName, lastName) VALUES ($1, $2)", firstName, lastName)
+	_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)", login, password, nom, prenom, email, date_naissance, telephone)
 	return errInsert
 }
