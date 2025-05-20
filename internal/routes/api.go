@@ -16,11 +16,12 @@ func SetupRouter() *gin.Engine {
     {
         api.HEAD("/health", handlers.HealthCheck)
 
-        /*api.GET("/admin/users", middleware.AdminAuth(), handlers.GetAllUsers)
+        /*
+		api.GET("/admin/users", middleware.AdminAuth(), handlers.GetAllUsers)
         api.DELETE("/admin/del_table", middleware.AdminAuth(), handlers.DeleteTable)
 
         api.GET("/user/forgetPswrd", handlers.ForgetPswrd)
-        api.POST("/user/add", handlers.CreateUser)
+        */api.POST("/user/add", handlers.CreateUser)/*
         api.DELETE("/user/delete", handlers.DeleteUser)
 
         api.POST("/user/addPlantCollection", handlers.AddPlantCollection)
