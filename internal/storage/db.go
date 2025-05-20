@@ -63,7 +63,7 @@ func InitPostgres() error {
 
 func isValidTableName(name string) bool {
     // Only allow alphanumeric and underscores
-    matched,  := regexp.MatchString(`^[a-zA-Z][a-zA-Z0-9_]*$`, name)
+    matched,_ := regexp.MatchString(`^[a-zA-Z][a-zA-Z0-9_]*$`, name)
     return matched
 }
 
