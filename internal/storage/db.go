@@ -23,13 +23,8 @@ func InitPostgres() error {
     _, err = DB.Exec(`
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
-            username TEXT NOT NULL,
-            role TEXT NOT NULL,
-            firstName TEXT NOT NULL,
-            lastName TEXT NOT NULL,
-            phone TEXT,
-            email TEXT UNIQUE NOT NULL,
-            pswrd TEXT NOT NULL
+            firstname TEXT NOT NULL,
+			lastname TEXT NOT NULL
         )`)
     if err != nil {
         return err

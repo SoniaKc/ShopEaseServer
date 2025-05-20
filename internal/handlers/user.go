@@ -15,7 +15,7 @@ func CreateUser(c *gin.Context){
         return
     }
 
-    if err := storage.AddUser(req.Username, req.Email, req.Pswrd); err != nil {
+    if err := storage.AddUser(req.Firstname, req.Lastname); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
