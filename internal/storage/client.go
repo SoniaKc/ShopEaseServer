@@ -80,9 +80,16 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 	i := 1
 
 	for field, value := range updates {
+		if value == nil || value == "" {
+			continue
+		}
 		query += fmt.Sprintf("%s = $%d, ", field, i)
 		params = append(params, value)
 		i++
+	}
+
+	if len(params) == 0 {
+		return errors.New("aucun champ valide à mettre à jour")
 	}
 
 	query = strings.TrimSuffix(query, ", ")
