@@ -3,7 +3,7 @@ package main
 import (
     "log"
     "os"
-    "simple-api/internal/routes"
+    "shop-ease-server/internal/routes"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package routes
 
 import (
-    "simple-api/internal/handlers"
-    "simple-api/pkg/middleware"
+    "shop-ease-server/internal/handlers"
+    "shop-ease-server/pkg/middleware"
 
     "github.com/gin-gonic/gin"
 )
