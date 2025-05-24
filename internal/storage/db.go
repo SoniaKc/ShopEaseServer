@@ -95,7 +95,7 @@ func InitPostgres() error {
 
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS produits (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         login_boutique TEXT NOT NULL,
         nom TEXT NOT NULL,
         categories TEXT,

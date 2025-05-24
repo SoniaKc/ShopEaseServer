@@ -4,7 +4,7 @@ type AddProduitRequest struct {
 	LoginBoutique string `json:"login_boutique" binding:"required"`
 	Nom           string `json:"nom" binding:"required"`
 	Categories    string `json:"categories" binding:"required"`
-	Reduction     string `json:"reduction" binding:"required"`
+	Reduction     string `json:"reduction"`
 	Prix          string `json:"prix" binding:"required"`
 	Description   string `json:"description" binding:"required"`
 }
