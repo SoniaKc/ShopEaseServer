@@ -113,7 +113,7 @@ func UpdatePaiement(login string, nomCarte string, updates map[string]interface{
 	}
 
 	query = strings.TrimSuffix(query, ", ")
-	query += " WHERE login = $" + strconv.Itoa(i) + "AND nom_carte = $" + strconv.Itoa(i+1)
+	query += " WHERE login = $" + strconv.Itoa(i) + " AND nom_carte = $" + strconv.Itoa(i+1)
 	params = append(params, login, nomCarte)
 
 	fmt.Printf("Generated SQL: %s\n", query)
