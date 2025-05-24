@@ -54,7 +54,7 @@ func InitPostgres() error {
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS parametres (
         login TEXT NOT NULL,
-        typeLogin TEXT NOT NULL,
+        type TEXT NOT NULL,
         langue TEXT NOT NULL,
         cookies TEXT NOT NULL,
         notifications TEXT NOT NULL,
@@ -69,7 +69,8 @@ func InitPostgres() error {
             login TEXT NOT NULL,
             nom_carte TEXT NOT NULL,
             nom_personne_carte TEXT NOT NULL,
-            cvc INTEGER NOT NULL,
+            numero TEXT NOT NULL,
+            cvc TEXT NOT NULL,
             date_expiration TEXT NOT NULL,
             PRIMARY KEY(login, nom_carte)
         )`)
