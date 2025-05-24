@@ -52,7 +52,7 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
-    CREATE TABLE IF NOT EXISTS parameters (
+    CREATE TABLE IF NOT EXISTS parametres (
         login TEXT NOT NULL,
         typeLogin TEXT NOT NULL,
         langue TEXT NOT NULL,

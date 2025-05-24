@@ -11,7 +11,7 @@ import (
 
 func AddParametre(login string, typeLogin string, langue string, cookies string, notifications string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM parameters WHERE login = $1 AND type = $2", login, typeLogin).Scan(&count)
+	err := DB.QueryRow("SELECT * FROM parametres WHERE login = $1 AND type = $2", login, typeLogin).Scan(&count)
 
 	if err == sql.ErrNoRows {
 		_, errInsert := DB.Exec(
