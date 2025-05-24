@@ -112,7 +112,7 @@ func InitPostgres() error {
         idProduit TEXT NOT NULL,
         idClient TEXT NOT NULL,
         quantite, INTEGER NOT NULL,
-        PRIMARY KEY(idProduit, idClient),
+        PRIMARY KEY(idProduit, idClient)
     )`)
 	if err != nil {
 		return err
@@ -121,8 +121,7 @@ func InitPostgres() error {
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS favoris (
         idProduit TEXT NOT NULL,
-        idClient TEXT NOT NULL,
-        PRIMARY KEY(idProduit, idClient),
+        idClient TEXT NOT NULL
     )`)
 	if err != nil {
 		return err
@@ -136,7 +135,7 @@ func InitPostgres() error {
         quantite TEXT NOT NULL,
         total TEXT NOT NULL,
         date_vente TEXT NOT NULL,
-        statut TEXT NOT NULL,
+        statut TEXT NOT NULL
     )`)
 	if err != nil {
 		return err
