@@ -94,6 +94,12 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
+    DROP TABLE IF EXISTS produits`)
+	if err != nil {
+		return err
+	}
+
+	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS produits (
         login_boutique TEXT NOT NULL,
         nom TEXT NOT NULL,
@@ -108,6 +114,11 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
+    DROP TABLE IF EXISTS panier`)
+	if err != nil {
+		return err
+	}
+	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS panier (
         idProduit TEXT NOT NULL,
         idClient TEXT NOT NULL,
@@ -119,6 +130,11 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
+    DROP TABLE IF EXISTS favoris`)
+	if err != nil {
+		return err
+	}
+	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS favoris (
         idProduit TEXT NOT NULL,
         idClient TEXT NOT NULL
@@ -127,6 +143,11 @@ func InitPostgres() error {
 		return err
 	}
 
+	_, err = DB.Exec(`
+    DROP TABLE IF EXISTS ventes`)
+	if err != nil {
+		return err
+	}
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS ventes (
         idTransaction TEXT NOT NULL PRIMARY KEY,
