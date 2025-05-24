@@ -29,7 +29,7 @@ func AddParametre(login string, typeLogin string, langue string, cookies string,
 	}
 
 	_, errInsert := DB.Exec(
-		"INSERT INTO parameters (login, type, langue, cookies, notifications) VALUES ($1, $2, $3, $4, $5)",
+		"INSERT INTO parametres (login, type, langue, cookies, notifications) VALUES ($1, $2, $3, $4, $5)",
 		login, typeLogin, langue, cookies, notifications)
 
 	return errInsert
