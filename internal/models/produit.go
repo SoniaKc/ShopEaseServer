@@ -10,11 +10,11 @@ type AddProduitRequest struct {
 }
 
 type GetProduitRequest struct {
-	Id int `json:"id" binding:"required"`
+	LoginBoutique string `json:"login_boutique" binding:"required"`
+	Nom           string `json:"nom" binding:"required"`
 }
 
 type Produit struct {
-	Id            int    `json:"id"`
 	LoginBoutique string `json:"login_boutique"`
 	Nom           string `json:"nom"`
 	Categories    string `json:"categories"`
@@ -24,9 +24,8 @@ type Produit struct {
 }
 
 type UpdateProduitRequest struct {
-	Id            int    `json:"id" binding:"required"`
-	LoginBoutique string `json:"login_boutique,omitempty"`
-	Nom           string `json:"nom,omitempty"`
+	LoginBoutique string `json:"login_boutique" binding:"required"`
+	Nom           string `json:"nom" binding:"required"`
 	Categories    string `json:"categories,omitempty"`
 	Reduction     string `json:"reduction,omitempty"`
 	Prix          string `json:"prix,omitempty"`

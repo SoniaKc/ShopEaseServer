@@ -30,7 +30,7 @@ func GetProduit(c *gin.Context) {
 		return
 	}
 
-	produit, err := storage.GetProduit(req.Id)
+	produit, err := storage.GetProduit(req.LoginBoutique, req.Nom)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -63,7 +63,7 @@ func DeleteProduit(c *gin.Context) {
 		return
 	}
 
-	err := storage.DeleteProduit(req.Id)
+	err := storage.DeleteProduit(req.LoginBoutique, req.Nom)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -95,7 +95,7 @@ func UpdateProduit(c *gin.Context) {
 		updates["description"] = req.Description
 	}
 
-	err := storage.UpdateProduit(req.Id, updates)
+	err := storage.UpdateProduit(req.LoginBoutique, req.Nom, updates)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

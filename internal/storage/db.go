@@ -95,13 +95,13 @@ func InitPostgres() error {
 
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS produits (
-        id SERIAL PRIMARY KEY,
         login_boutique TEXT NOT NULL references boutiques(login),
         nom TEXT NOT NULL,
         categories TEXT,
         reduction TEXT,
         prix TEXT NOT NULL,
         description TEXT NOT NULL,
+        PRIMARY KEY(login_boutique, nom)
     )`)
 	if err != nil {
 		return err

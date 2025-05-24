@@ -28,11 +28,10 @@ func AddProduit(login_boutique string, nom string, categories string, reduction 
 	return errInsert
 }
 
-func GetProduit(id int) (*models.Produit, error) {
+func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 	var produit models.Produit
 
-	err := DB.QueryRow("SELECT * FROM produits WHERE id = $1", id).Scan(
-		&produit.Id,
+	err := DB.QueryRow("SELECT * FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom).Scan(
 		&produit.LoginBoutique,
 		&produit.Nom,
 		&produit.Categories,
@@ -51,8 +50,8 @@ func GetProduit(id int) (*models.Produit, error) {
 	return &produit, nil
 }
 
-func DeleteProduit(id int) error {
-	result, err := DB.Exec("DELETE FROM produits WHERE id = $1", id)
+func DeleteProduit(login_boutique string, nom string) error {
+	result, err := DB.Exec("DELETE FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom)
 
 	if err != nil {
 		return fmt.Errorf("failed to delete produit: %v", err)
@@ -70,7 +69,7 @@ func DeleteProduit(id int) error {
 	return nil
 }
 
-func UpdateProduit(id int, updates map[string]interface{}) error {
+func UpdateProduit(login_boutique string, nom string, updates map[string]interface{}) error {
 	if len(updates) == 0 {
 		return nil
 	}
@@ -109,8 +108,8 @@ func UpdateProduit(id int, updates map[string]interface{}) error {
 	}
 
 	query = strings.TrimSuffix(query, ", ")
-	query += " WHERE id = $" + strconv.Itoa(i)
-	params = append(params, id)
+	query += " WHERE login_boutique = $" + strconv.Itoa(i) + " AND nom = $" + strconv.Itoa(i+1)
+	params = append(params, login_boutique, nom)
 
 	fmt.Printf("Generated SQL: %s\n", query)
 	for i, param := range params {
