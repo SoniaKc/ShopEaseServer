@@ -12,3 +12,33 @@ type AddBoutiqueRequest struct {
 	Pays_enregistrement string `json:"pays_enregistrement"`
 	Iban                string `json:"iban"`
 }
+
+type GetBoutiqueRequest struct {
+	Login string `json:"login" binding:"required"`
+}
+
+type Boutique struct {
+	Login               string `json:"login"`
+	Password            string `json:"password"`
+	Nom                 string `json:"nom"`
+	Email               string `json:"email"`
+	Telephone           string `json:"telephone"`
+	Siret               string `json:"siret"`
+	Forme_juridique     string `json:"forme_juridique"`
+	Siege_social        string `json:"siege_social"`
+	Pays_enregistrement string `json:"pays_enregistrement"`
+	Iban                string `json:"iban"`
+}
+
+type UpdateBoutiqueRequest struct {
+	Login               string `json:"login" binding:"required"`
+	Password            string `json:"password,omitempty"`
+	Nom                 string `json:"nom,omitempty"`
+	Email               string `json:"email,omitempty"`
+	Telephone           string `json:"telephone,omitempty"`
+	Siret               string `json:"siret,omitempty"`
+	Forme_juridique     string `json:"forme_juridique,omitempty"`
+	Siege_social        string `json:"siege_social,omitempty"`
+	Pays_enregistrement string `json:"pays_enregistrement,omitempty"`
+	Iban                string `json:"iban,omitempty"`
+}

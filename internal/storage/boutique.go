@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"shop-ease-server/internal/models"
+	"strconv"
+	"strings"
 )
 
 func AddBoutique(login string, password string, nom string, email string, telephone string,
@@ -30,4 +33,117 @@ func AddBoutique(login string, password string, nom string, email string, teleph
 		login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban)
 
 	return errInsert
+}
+
+func GetBoutique(login string) (*models.Boutique, error) {
+	var boutique models.Boutique
+
+	err := DB.QueryRow("SELECT * FROM boutiques WHERE login = $1", login).Scan(
+		&boutique.Login,
+		&boutique.Password,
+		&boutique.Nom,
+		&boutique.Email,
+		&boutique.Telephone,
+		&boutique.Siret,
+		&boutique.Forme_juridique,
+		&boutique.Siege_social,
+		&boutique.Pays_enregistrement,
+		&boutique.Iban,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("boutique non trouvée")
+		}
+		return nil, fmt.Errorf("erreur lors de la récupération de la boutique: %v", err)
+	}
+
+	return &boutique, nil
+}
+
+func DeleteBoutique(login string) error {
+	result, err := DB.Exec("DELETE FROM boutiques WHERE login = $1", login)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete boutique: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("boutique not found")
+	}
+
+	return nil
+}
+
+func UpdateBoutique(login string, updates map[string]interface{}) error {
+	if len(updates) == 0 {
+		return nil
+	}
+
+	query := "UPDATE boutiques SET "
+	params := []interface{}{}
+	i := 1
+
+	allowedFields := map[string]bool{
+		"password":            true,
+		"nom":                 true,
+		"email":               true,
+		"telephone":           true,
+		"siret":               true,
+		"forme_juridique":     true,
+		"siege_social":        true,
+		"pays_enregistrement": true,
+		"iban":                true,
+	}
+
+	for field, value := range updates {
+		if !allowedFields[field] {
+			continue
+		}
+
+		if strVal, ok := value.(string); ok && strVal == "" {
+			continue
+		}
+
+		if value == nil {
+			continue
+		}
+		query += fmt.Sprintf("%s = $%d, ", field, i)
+		params = append(params, value)
+		i++
+	}
+
+	if len(params) == 0 {
+		return errors.New("aucun champ valide à mettre à jour")
+	}
+
+	query = strings.TrimSuffix(query, ", ")
+	query += " WHERE login = $" + strconv.Itoa(i)
+	params = append(params, login)
+
+	fmt.Printf("Generated SQL: %s\n", query)
+	for i, param := range params {
+		fmt.Printf("$%d = %v (type: %T)\n", i+1, param, param)
+	}
+
+	result, err := DB.Exec(query, params...)
+	if err != nil {
+		return fmt.Errorf("failed to update boutique: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("boutique not found")
+	}
+
+	return nil
 }

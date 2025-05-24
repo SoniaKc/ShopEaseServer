@@ -11,7 +11,7 @@ import (
 
 func AddClient(login string, password string, nom string, prenom string, email string, date_naissance string, telephone string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM clients WHERE login = $1 AND email = $2", login, email).Scan(&count)
+	err := DB.QueryRow("SELECT * FROM clients WHERE login = $1 OR email = $2", login, email).Scan(&count)
 
 	if err == sql.ErrNoRows {
 		_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)", login, password, nom, prenom, email, date_naissance, telephone)
@@ -93,12 +93,10 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 			continue
 		}
 
-		// Vérifie spécifiquement pour les chaînes vides
 		if strVal, ok := value.(string); ok && strVal == "" {
 			continue
 		}
 
-		// Vérifie pour les valeurs nil
 		if value == nil {
 			continue
 		}
