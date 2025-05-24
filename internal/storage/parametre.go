@@ -112,7 +112,7 @@ func UpdateParametre(login string, typeLogin string, updates map[string]interfac
 	}
 
 	query = strings.TrimSuffix(query, ", ")
-	query += " WHERE login = $" + strconv.Itoa(i) + "AND type = $" + strconv.Itoa(i+1)
+	query += " WHERE login = $" + strconv.Itoa(i) + " AND type = $" + strconv.Itoa(i+1)
 	params = append(params, login, typeLogin)
 
 	fmt.Printf("Generated SQL: %s\n", query)
