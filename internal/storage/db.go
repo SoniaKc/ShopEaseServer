@@ -21,15 +21,15 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
-        CREATE TABLE IF NOT EXISTS clients (
-            login TEXT PRIMARY KEY,
-            password TEXT NOT NULL,
-            nom TEXT NOT NULL,
-			prenom TEXT NOT NULL,
-            email TEXT NOT NULL,
-            date_naissance TEXT NOT NULL,
-            telephone TEXT
-        )`)
+    CREATE TABLE IF NOT EXISTS clients (
+        login TEXT PRIMARY KEY,
+        password TEXT NOT NULL,
+        nom TEXT NOT NULL,
+        prenom TEXT NOT NULL,
+        email TEXT NOT NULL,
+        date_naissance TEXT NOT NULL,
+        telephone TEXT
+    )`)
 	if err != nil {
 		return err
 	}
@@ -66,14 +66,14 @@ func InitPostgres() error {
 
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS paiements (
-            login TEXT NOT NULL,
-            nom_carte TEXT NOT NULL,
-            nom_personne_carte TEXT NOT NULL,
-            numero TEXT NOT NULL,
-            cvc TEXT NOT NULL,
-            date_expiration TEXT NOT NULL,
-            PRIMARY KEY(login, nom_carte)
-        )`)
+        login TEXT NOT NULL,
+        nom_carte TEXT NOT NULL,
+        nom_personne_carte TEXT NOT NULL,
+        numero TEXT NOT NULL,
+        cvc TEXT NOT NULL,
+        date_expiration TEXT NOT NULL,
+        PRIMARY KEY(login, nom_carte)
+    )`)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func InitPostgres() error {
     CREATE TABLE IF NOT EXISTS panier (
         idProduit TEXT NOT NULL,
         idClient TEXT NOT NULL,
-        quantite, INTEGER NOT NULL,
+        quantite INTEGER NOT NULL,
         PRIMARY KEY(idProduit, idClient)
     )`)
 	if err != nil {

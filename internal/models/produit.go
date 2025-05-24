@@ -3,7 +3,7 @@ package models
 type AddProduitRequest struct {
 	LoginBoutique string `json:"login_boutique" binding:"required"`
 	Nom           string `json:"nom" binding:"required"`
-	Categories    string `json:"categories" binding:"required"`
+	Categories    string `json:"categories"`
 	Reduction     string `json:"reduction"`
 	Prix          string `json:"prix" binding:"required"`
 	Description   string `json:"description" binding:"required"`
