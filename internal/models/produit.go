@@ -1,7 +1,6 @@
 package models
 
 type AddProduitRequest struct {
-	Id            int    `json:"id" binding:"required"`
 	LoginBoutique string `json:"login_boutique" binding:"required"`
 	Nom           string `json:"nom" binding:"required"`
 	Categories    string `json:"categories" binding:"required"`
