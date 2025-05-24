@@ -93,6 +93,61 @@ func InitPostgres() error {
 		return err
 	}
 
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS produits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        login_boutique TEXT NOT NULL,
+        nom TEXT NOT NULL,
+        categories TEXT,
+        reduction TEXT,
+        prix TEXT NOT NULL,
+        description TEXT NOT NULL,
+        FOREIGN KEY(id_boutique) REFERENCES boutiques(login)
+    )`)
+	if err != nil {
+		return err
+	}
+
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS panier (
+        idProduit TEXT NOT NULL,
+        idClient TEXT NOT NULL,
+        quantite, INTEGER NOT NULL,
+        PRIMARY KEY(idProduit, idClient),
+        FOREIGN KEY(idProduit) REFERENCES produits(id),
+        FOREIGN KEY(idClient) REFERENCES clients(login)
+    )`)
+	if err != nil {
+		return err
+	}
+
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS favoris (
+        idProduit TEXT NOT NULL,
+        idClient TEXT NOT NULL,
+        PRIMARY KEY(idProduit, idClient),
+        FOREIGN KEY(idClient) REFERENCES clients(id)
+    )`)
+	if err != nil {
+		return err
+	}
+
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS ventes (
+        idTransaction TEXT NOT NULL PRIMARY KEY,
+        idProduit TEXT NOT NULL,
+        idClient TEXT NOT NULL,
+        quantite TEXT NOT NULL,
+        total TEXT NOT NULL,
+        date_vente TEXT NOT NULL,
+        statut TEXT NOT NULL,
+        FOREIGN KEY(idProduit) REFERENCES produits(id),
+        FOREIGN KEY(idClient) REFERENCES clients(login)
+    )`)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
