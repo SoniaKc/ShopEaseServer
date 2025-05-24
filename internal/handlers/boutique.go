@@ -20,7 +20,7 @@ func AddBoutique(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"AddBoutique": "Succeeded to create a new user"})
+	c.JSON(http.StatusCreated, gin.H{"AddBoutique": "Succeeded to create a new boutique"})
 }
 
 func GetBoutique(c *gin.Context) {

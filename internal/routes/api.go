@@ -33,6 +33,9 @@ func SetupRouter() *gin.Engine {
 		api.PUT("/boutique/update", handlers.UpdateBoutique)
 
 		api.POST("/parametre/add", handlers.AddParametre)
+		api.GET("/parametre/get", handlers.GetParametre)
+		api.DELETE("/parametre/delete", handlers.DeleteParametre)
+		api.PUT("/parametre/update", handlers.UpdateParametre)
 
 		api.POST("/paiement/add", handlers.AddPaiement)
 
