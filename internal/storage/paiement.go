@@ -16,7 +16,7 @@ func AddPaiement(login string, nom_carte string, nom_personne_carte string, nume
 	if err == sql.ErrNoRows {
 		_, errInsert := DB.Exec(
 			"INSERT INTO paiements (login, nom_carte, nom_personne_carte, numero, cvc, date_expiration) VALUES ($1, $2, $3, $4, $5, $6)",
-			login, nom_carte, nom_personne_carte, cvc, date_expiration)
+			login, nom_carte, nom_personne_carte, numero, cvc, date_expiration)
 		return errInsert
 	}
 
