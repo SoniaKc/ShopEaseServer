@@ -113,8 +113,6 @@ func InitPostgres() error {
         idClient TEXT NOT NULL,
         quantite, INTEGER NOT NULL,
         PRIMARY KEY(idProduit, idClient),
-        FOREIGN KEY(idProduit) REFERENCES produits(id),
-        FOREIGN KEY(idClient) REFERENCES clients(login)
     )`)
 	if err != nil {
 		return err
@@ -125,7 +123,6 @@ func InitPostgres() error {
         idProduit TEXT NOT NULL,
         idClient TEXT NOT NULL,
         PRIMARY KEY(idProduit, idClient),
-        FOREIGN KEY(idClient) REFERENCES clients(id)
     )`)
 	if err != nil {
 		return err
@@ -140,8 +137,6 @@ func InitPostgres() error {
         total TEXT NOT NULL,
         date_vente TEXT NOT NULL,
         statut TEXT NOT NULL,
-        FOREIGN KEY(idProduit) REFERENCES produits(id),
-        FOREIGN KEY(idClient) REFERENCES clients(login)
     )`)
 	if err != nil {
 		return err
