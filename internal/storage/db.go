@@ -79,12 +79,6 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
-    DROP TABLE IF EXISTS adresses`)
-	if err != nil {
-		return err
-	}
-
-	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS adresses (
         login TEXT NOT NULL,
         nom_adresse TEXT NOT NULL,

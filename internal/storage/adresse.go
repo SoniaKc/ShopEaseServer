@@ -112,7 +112,7 @@ func UpdateAdresse(login string, nomAdresse string, updates map[string]interface
 	}
 
 	query = strings.TrimSuffix(query, ", ")
-	query += " WHERE login = $" + strconv.Itoa(i) + " AND nom_adresses = $" + strconv.Itoa(i+1)
+	query += " WHERE login = $" + strconv.Itoa(i) + " AND nom_adresse = $" + strconv.Itoa(i+1)
 	params = append(params, login, nomAdresse)
 
 	fmt.Printf("Generated SQL: %s\n", query)
