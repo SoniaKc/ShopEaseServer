@@ -65,9 +65,13 @@ func InitPostgres() error {
 	}
 
 	_, err = DB.Exec(`
-        DROP TABLE IF EXISTS paiements
+        DROP TABLE IF EXISTS paiements`)
+	if err != nil {
+		return err
+	}
 
-        CREATE TABLE IF NOT EXISTS paiements (
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS paiements (
             login TEXT NOT NULL,
             nom_carte TEXT NOT NULL,
             nom_personne_carte TEXT NOT NULL,
