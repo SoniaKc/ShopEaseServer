@@ -25,7 +25,7 @@ func SetupRouter() *gin.Engine {
 		api.POST("/client/add", handlers.AddClient)
 		api.GET("/client/get", handlers.GetClient)
 		api.DELETE("/client/delete", handlers.DeleteClient)
-		api.PUT("/client/update", handlers.UpdateClient) // Méthode PUT pour les mises à jour
+		api.PUT("/client/update", handlers.UpdateClient)
 
 		api.POST("/boutique/add", handlers.AddBoutique)
 		api.GET("/boutique/get", handlers.GetBoutique)
@@ -58,6 +58,10 @@ func SetupRouter() *gin.Engine {
 		api.GET("/panier/getAll", handlers.GetFullPanier)
 		api.DELETE("/panier/delete", handlers.DeletePanier)
 		api.PUT("/panier/update", handlers.UpdateQteInPanier)
+
+		api.POST("/favoris/add", handlers.AddFavori)
+		api.GET("/favoris/getAll", handlers.GetAllFavoris)
+		api.DELETE("/favoris/delete", handlers.DeleteFavoris)
 
 		/*
 		   api.DELETE("/user/delete", handlers.DeleteUser)
