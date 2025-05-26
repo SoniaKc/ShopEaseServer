@@ -57,7 +57,7 @@ func GetPaiement(login string, nomCarte string) (*models.Paiement, error) {
 }
 
 func GetAllPaiement(login string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT * FROM paiement WHERE login = $1", login)
+	rows, err := DB.Query("SELECT * FROM paiements WHERE login = $1", login)
 	if err != nil {
 		return nil, err
 	}
