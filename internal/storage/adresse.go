@@ -54,6 +54,36 @@ func GetAdresse(login string, nomAdresse string) (*models.Adresse, error) {
 	return &adresse, nil
 }
 
+func GetAllAdresse(login string, nomAdresse string) ([]map[string]interface{}, error) {
+	rows, err := DB.Query("SELECT idProduit, quantite FROM adresse WHERE login = $1 AND nom_adresse = $2", login, nomAdresse)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var adresse []map[string]interface{}
+	for rows.Next() {
+		var numero string
+		var nomRue string
+		var codePostal string
+		var ville string
+		var pays string
+		if err := rows.Scan(&numero, &nomRue, &codePostal, &ville, &pays); err != nil {
+			return nil, err
+		}
+		adresse = append(adresse, map[string]interface{}{
+			"login":       login,
+			"nom_adresse": nomAdresse,
+			"numero":      numero,
+			"nom_rue":     nomRue,
+			"code_postal": codePostal,
+			"ville":       ville,
+			"pays":        pays,
+		})
+	}
+	return adresse, nil
+}
+
 func DeleteAdresse(login string, nomAdresse string) error {
 	result, err := DB.Exec("DELETE FROM adresses WHERE login = $1 AND nom_adresse = $2", login, nomAdresse)
 

@@ -42,6 +42,34 @@ func GetAdresse(c *gin.Context) {
 	c.JSON(http.StatusOK, adresse)
 }
 
+func GetAllAdresse(c *gin.Context) {
+	login := c.Query("login")
+	nomAdresse := c.Query("nom_adresse")
+
+	if login == "" || nomAdresse == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètres 'login' et 'nom_adresse' requis",
+		})
+		return
+	}
+
+	adresses, err := storage.GetAllAdresse(login, nomAdresse)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(adresses) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Aucune adresse",
+			"data":    []interface{}{},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, adresses)
+}
+
 func DeleteAdresse(c *gin.Context) {
 	login := c.Query("login")
 	nomAdresse := c.Query("nom_adresse")
