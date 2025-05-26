@@ -52,7 +52,7 @@ func GetAllPaiement(c *gin.Context) {
 		return
 	}
 
-	paiements, err := storage.GetFullPanier(login)
+	paiements, err := storage.GetAllPaiement(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
