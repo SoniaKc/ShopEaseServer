@@ -39,6 +39,7 @@ func SetupRouter() *gin.Engine {
 
 		api.POST("/paiement/add", handlers.AddPaiement)
 		api.GET("/paiement/get", handlers.GetPaiement)
+		api.GET("/paiement/getAll", handlers.GetAllPaiement)
 		api.DELETE("/paiement/delete", handlers.DeletePaiement)
 		api.PUT("/paiement/update", handlers.UpdatePaiement)
 

@@ -56,6 +56,37 @@ func GetPaiement(login string, nomCarte string) (*models.Paiement, error) {
 	return &paiement, nil
 }
 
+func GetAllPaiement(login string) ([]map[string]interface{}, error) {
+	rows, err := DB.Query("SELECT * FROM paiement WHERE login = $1", login)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var paiements []map[string]interface{}
+	for rows.Next() {
+		var loginRecup string
+		var nomCarte string
+		var nomPersonneCarte string
+		var numero string
+		var cvc string
+		var dateExpiration string
+
+		if err := rows.Scan(&loginRecup, &nomCarte, &nomPersonneCarte, &numero, &cvc, &dateExpiration); err != nil {
+			return nil, err
+		}
+		paiements = append(paiements, map[string]interface{}{
+			"login":              loginRecup,
+			"nom_carte":          nomCarte,
+			"nom_personne_carte": nomPersonneCarte,
+			"nunero":             numero,
+			"cvc":                cvc,
+			"date_expiration":    dateExpiration,
+		})
+	}
+	return paiements, nil
+}
+
 func DeletePaiement(login string, nomCarte string) error {
 	result, err := DB.Exec("DELETE FROM paiements WHERE login = $1 AND nom_carte = $2", login, nomCarte)
 

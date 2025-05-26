@@ -42,6 +42,33 @@ func GetPaiement(c *gin.Context) {
 	c.JSON(http.StatusOK, paiement)
 }
 
+func GetAllPaiement(c *gin.Context) {
+	login := c.Query("login")
+
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètre 'login' requis",
+		})
+		return
+	}
+
+	paiements, err := storage.GetFullPanier(login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(paiements) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Aucun paiement",
+			"data":    []interface{}{},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, paiements)
+}
+
 func DeletePaiement(c *gin.Context) {
 	login := c.Query("login")
 	nomCarte := c.Query("nom_carte")
