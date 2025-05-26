@@ -24,13 +24,14 @@ func AddClient(c *gin.Context) {
 }
 
 func GetClient(c *gin.Context) {
-	var req models.GetClientRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	//var req models.GetClientRequest
+	login := c.Query("login")
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
 		return
 	}
 
-	client, err := storage.GetClient(req.Login)
+	client, err := storage.GetClient(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

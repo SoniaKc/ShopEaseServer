@@ -79,7 +79,7 @@ func UpdateProduit(login_boutique string, nom string, updates map[string]interfa
 	i := 1
 
 	allowedFields := map[string]bool{
-		"nom":         true,
+		//"nom":         true,
 		"categories":  true,
 		"reduction":   true,
 		"prix":        true,

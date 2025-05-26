@@ -79,9 +79,9 @@ func UpdateProduit(c *gin.Context) {
 	}
 
 	updates := make(map[string]interface{})
-	if req.Nom != "" {
+	/*if req.Nom != "" {
 		updates["nom"] = req.Nom
-	}
+	}*/
 	if req.Categories != "" {
 		updates["categories"] = req.Categories
 	}
