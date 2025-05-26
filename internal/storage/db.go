@@ -166,23 +166,6 @@ func InitPostgres() error {
 		return err
 	}
 
-	_, err = DB.Exec(`DROP TABLE IF EXISTS parameters`)
-	if err != nil {
-		return err
-	}
-	_, err = DB.Exec(`DROP TABLE IF EXISTS plantcollections`)
-	if err != nil {
-		return err
-	}
-	_, err = DB.Exec(`DROP TABLE IF EXISTS plants`)
-	if err != nil {
-		return err
-	}
-	_, err = DB.Exec(`DROP TABLE IF EXISTS users`)
-	if err != nil {
-		return err
-	}
-
 	return err
 }
 
