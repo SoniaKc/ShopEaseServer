@@ -24,13 +24,17 @@ func AddAdresse(c *gin.Context) {
 }
 
 func GetAdresse(c *gin.Context) {
-	var req models.GetAdresseRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	nomAdresse := c.Query("nom_adresse")
+
+	if login == "" || nomAdresse == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'nom_adresse' sont requis dans l'URL",
+		})
 		return
 	}
 
-	adresse, err := storage.GetAdresse(req.Login, req.NomAdresse)
+	adresse, err := storage.GetAdresse(login, nomAdresse)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -39,13 +43,17 @@ func GetAdresse(c *gin.Context) {
 }
 
 func DeleteAdresse(c *gin.Context) {
-	var req models.GetAdresseRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	nomAdresse := c.Query("nom_adresse")
+
+	if login == "" || nomAdresse == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'nom_adresse' sont requis dans l'URL",
+		})
 		return
 	}
 
-	err := storage.DeleteAdresse(req.Login, req.NomAdresse)
+	err := storage.DeleteAdresse(login, nomAdresse)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

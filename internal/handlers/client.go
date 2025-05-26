@@ -24,7 +24,6 @@ func AddClient(c *gin.Context) {
 }
 
 func GetClient(c *gin.Context) {
-	//var req models.GetClientRequest
 	login := c.Query("login")
 	if login == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
@@ -40,13 +39,13 @@ func GetClient(c *gin.Context) {
 }
 
 func DeleteClient(c *gin.Context) {
-	var req models.GetClientRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
 		return
 	}
 
-	err := storage.DeleteClient(req.Login)
+	err := storage.DeleteClient(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

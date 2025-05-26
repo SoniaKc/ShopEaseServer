@@ -24,13 +24,17 @@ func AddParametre(c *gin.Context) {
 }
 
 func GetParametre(c *gin.Context) {
-	var req models.GetParametreRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	typeLogin := c.Query("type")
+
+	if login == "" || typeLogin == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'type' sont requis dans l'URL",
+		})
 		return
 	}
 
-	parametre, err := storage.GetParametre(req.Login, req.Type)
+	parametre, err := storage.GetParametre(login, typeLogin)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -39,13 +43,17 @@ func GetParametre(c *gin.Context) {
 }
 
 func DeleteParametre(c *gin.Context) {
-	var req models.GetParametreRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	typeLogin := c.Query("type")
+
+	if login == "" || typeLogin == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'type' sont requis dans l'URL",
+		})
 		return
 	}
 
-	err := storage.DeleteParametre(req.Login, req.Type)
+	err := storage.DeleteParametre(login, typeLogin)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -24,13 +24,17 @@ func AddProduit(c *gin.Context) {
 }
 
 func GetProduit(c *gin.Context) {
-	var req models.GetProduitRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	loginBoutique := c.Query("login_boutique")
+	nom := c.Query("nom")
+
+	if loginBoutique == "" || nom == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'loginBoutique' et 'nom' sont requis dans l'URL",
+		})
 		return
 	}
 
-	produit, err := storage.GetProduit(req.LoginBoutique, req.Nom)
+	produit, err := storage.GetProduit(loginBoutique, nom)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -57,13 +61,17 @@ func GetProduit(c *gin.Context) {
 }
 
 func DeleteProduit(c *gin.Context) {
-	var req models.GetProduitRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	loginBoutique := c.Query("login_boutique")
+	nom := c.Query("nom")
+
+	if loginBoutique == "" || nom == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'loginBoutique' et 'nom' sont requis dans l'URL",
+		})
 		return
 	}
 
-	err := storage.DeleteProduit(req.LoginBoutique, req.Nom)
+	err := storage.DeleteProduit(loginBoutique, nom)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

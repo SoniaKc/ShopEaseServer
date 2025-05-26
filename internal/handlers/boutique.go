@@ -24,13 +24,14 @@ func AddBoutique(c *gin.Context) {
 }
 
 func GetBoutique(c *gin.Context) {
-	var req models.GetBoutiqueRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	//var req models.GetBoutiqueRequest
+	login := c.Query("login")
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
 		return
 	}
 
-	boutique, err := storage.GetBoutique(req.Login)
+	boutique, err := storage.GetBoutique(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -39,13 +40,13 @@ func GetBoutique(c *gin.Context) {
 }
 
 func DeleteBoutique(c *gin.Context) {
-	var req models.GetBoutiqueRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
 		return
 	}
 
-	err := storage.DeleteBoutique(req.Login)
+	err := storage.DeleteBoutique(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

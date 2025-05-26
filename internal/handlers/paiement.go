@@ -24,13 +24,17 @@ func AddPaiement(c *gin.Context) {
 }
 
 func GetPaiement(c *gin.Context) {
-	var req models.GetPaiementRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	nomCarte := c.Query("nom_carte")
+
+	if login == "" || nomCarte == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'nom_carte' sont requis dans l'URL",
+		})
 		return
 	}
 
-	paiement, err := storage.GetPaiement(req.Login, req.NomCarte)
+	paiement, err := storage.GetPaiement(login, nomCarte)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -39,13 +43,17 @@ func GetPaiement(c *gin.Context) {
 }
 
 func DeletePaiement(c *gin.Context) {
-	var req models.GetPaiementRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
+	login := c.Query("login")
+	nomCarte := c.Query("nom_carte")
+
+	if login == "" || nomCarte == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login' et 'nom_carte' sont requis dans l'URL",
+		})
 		return
 	}
 
-	err := storage.DeletePaiement(req.Login, req.NomCarte)
+	err := storage.DeletePaiement(login, nomCarte)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
