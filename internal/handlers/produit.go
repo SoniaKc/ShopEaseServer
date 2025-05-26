@@ -60,6 +60,33 @@ func GetProduit(c *gin.Context) {
 	   c.JSON(http.StatusOK, produit)*/
 }
 
+func GetAllProduit(c *gin.Context) {
+	loginBoutique := c.Query("login_boutique")
+
+	if loginBoutique == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètre 'login_boutique' requis",
+		})
+		return
+	}
+
+	produits, err := storage.GetAllAdresse(loginBoutique)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(produits) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Aucun produit",
+			"data":    []interface{}{},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, produits)
+}
+
 func DeleteProduit(c *gin.Context) {
 	loginBoutique := c.Query("login_boutique")
 	nom := c.Query("nom")

@@ -50,6 +50,33 @@ func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 	return &produit, nil
 }
 
+func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
+	rows, err := DB.Query("SELECT nom, categories, reduction, prix FROM produits WHERE login = $1", loginBoutique)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var adresse []map[string]interface{}
+	for rows.Next() {
+		var nom string
+		var categories string
+		var reduction string
+		var prix string
+		if err := rows.Scan(&nom, &categories, &reduction, &prix); err != nil {
+			return nil, err
+		}
+		adresse = append(adresse, map[string]interface{}{
+			"login_boutique": loginBoutique,
+			"nom":            nom,
+			"categories":     categories,
+			"reduction":      reduction,
+			"prix":           prix,
+		})
+	}
+	return adresse, nil
+}
+
 func DeleteProduit(login_boutique string, nom string) error {
 	result, err := DB.Exec("DELETE FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom)
 
