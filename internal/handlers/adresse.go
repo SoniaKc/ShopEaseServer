@@ -44,16 +44,15 @@ func GetAdresse(c *gin.Context) {
 
 func GetAllAdresse(c *gin.Context) {
 	login := c.Query("login")
-	nomAdresse := c.Query("nom_adresse")
 
-	if login == "" || nomAdresse == "" {
+	if login == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'login' et 'nom_adresse' requis",
+			"error": "Paramètres 'login' requis",
 		})
 		return
 	}
 
-	adresses, err := storage.GetAllAdresse(login, nomAdresse)
+	adresses, err := storage.GetAllAdresse(login)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
