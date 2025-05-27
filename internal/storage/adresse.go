@@ -55,7 +55,7 @@ func GetAdresse(login string, nomAdresse string) (*models.Adresse, error) {
 }
 
 func GetAllAdresse(login string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT nom_adresse, numero, nom_rue, code_postal, ville, pays FROM adresse WHERE login = $1", login)
+	rows, err := DB.Query("SELECT nom_adresse, numero, nom_rue, code_postal, ville, pays FROM adresses WHERE login = $1", login)
 	if err != nil {
 		return nil, err
 	}
