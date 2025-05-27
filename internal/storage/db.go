@@ -144,20 +144,22 @@ func InitPostgres() error {
 		return err
 	}
 
-	/*_, err = DB.Exec(`
+	_, err = DB.Exec(`
 	DROP TABLE IF EXISTS ventes`)
 	if err != nil {
 		return err
-	}*/
+	}
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS ventes (
-        idTransaction TEXT NOT NULL PRIMARY KEY,
-        idProduit TEXT NOT NULL,
+        idTransaction TEXT NOT NULL,
+        login_boutique TEXT NOT NULL,
+        nom_produit TEXT NOT NULL,
         idClient TEXT NOT NULL,
         quantite TEXT NOT NULL,
         total TEXT NOT NULL,
         date_vente TEXT NOT NULL,
-        statut TEXT NOT NULL
+        statut TEXT NOT NULL,
+		PRIMARY KEY(idTransaction, login_boutique, nom_produit)
     )`)
 	if err != nil {
 		return err

@@ -65,6 +65,13 @@ func SetupRouter() *gin.Engine {
 		api.GET("/favoris/getAll", handlers.GetAllFavoris)
 		api.DELETE("/favoris/delete", handlers.DeleteFavoris)
 
+		api.POST("/vente/add", handlers.AddVente)
+		api.GET("/vente/getByIdTransaction", handlers.GetAllTransaction)
+		api.GET("/vente/getByClient", handlers.GetAllVentesClient)
+		api.GET("/vente/getByBoutique", handlers.GetAllVentesBoutique)
+		api.DELETE("/vente/deleteByIdTransaction", handlers.DeleteAllTransaction)
+		api.PUT("/vente/updateStatut", handlers.UpdateTransactionStatut)
+
 		/*
 		   api.DELETE("/user/delete", handlers.DeleteUser)
 
