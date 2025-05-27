@@ -7,7 +7,7 @@ import (
 
 func AddFavori(idProduit string, idClient string) error {
 	var count int
-	err := DB.QueryRow("SELECT COUNT(*) FROM panier WHERE idProduit = $1 AND idClient = $2", idProduit, idClient).Scan(&count)
+	err := DB.QueryRow("SELECT COUNT(*) FROM favoris WHERE idProduit = $1 AND idClient = $2", idProduit, idClient).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("erreur lors de la vérification du panier: %v", err)

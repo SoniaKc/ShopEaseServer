@@ -144,11 +144,11 @@ func InitPostgres() error {
 		return err
 	}
 
-	_, err = DB.Exec(`
+	/*_, err = DB.Exec(`
 	DROP TABLE IF EXISTS ventes`)
 	if err != nil {
 		return err
-	}
+	}*/
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS ventes (
         idTransaction TEXT NOT NULL,

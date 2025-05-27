@@ -151,7 +151,7 @@ func GetAllVentesBoutique(loginBoutique string) (map[string]interface{}, error) 
 }
 
 func DeleteAllTransaction(idTransaction string) error {
-	result, err := DB.Exec("DELETE FROM transaction WHERE idTransaction = $1", idTransaction)
+	result, err := DB.Exec("DELETE FROM ventes WHERE idTransaction = $1", idTransaction)
 
 	if err != nil {
 		return fmt.Errorf("failed to delete all transactions row: %v", err)
