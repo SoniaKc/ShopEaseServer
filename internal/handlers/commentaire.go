@@ -61,13 +61,13 @@ func GetAllComsClient(c *gin.Context) {
 }
 
 func DeleteCommentaire(c *gin.Context) {
-	loginBoutique := c.Query("loginBoutique")
+	loginBoutique := c.Query("login_boutique")
 	nomProduit := c.Query("nom_produit")
 	idClient := c.Query("idClient")
 
 	if loginBoutique == "" || nomProduit == "" || idClient == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Les paramètres 'loginBoutique', 'nom_produit' et 'idClient' sont requis dans l'URL",
+			"error": "Les paramètres 'login_boutique', 'nom_produit' et 'idClient' sont requis dans l'URL",
 		})
 		return
 	}
