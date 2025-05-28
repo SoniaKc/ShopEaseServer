@@ -165,6 +165,19 @@ func InitPostgres() error {
 		return err
 	}
 
+	_, err = DB.Exec(`
+    CREATE TABLE IF NOT EXISTS commentaires (
+        login_boutique TEXT NOT NULL,
+        nom_produit TEXT NOT NULL,
+        idClient TEXT NOT NULL,
+        note TEXT NOT NULL,
+        commentaire TEXT,
+		PRIMARY KEY(login_boutique, nom_produit, idClient)
+    )`)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 

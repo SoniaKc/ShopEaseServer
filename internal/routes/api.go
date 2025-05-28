@@ -72,6 +72,12 @@ func SetupRouter() *gin.Engine {
 		api.DELETE("/vente/deleteByIdTransaction", handlers.DeleteAllTransaction)
 		api.PUT("/vente/updateStatut", handlers.UpdateTransactionStatut)
 
+		api.POST("/commentaire/add", handlers.AddCommentaire)
+		api.GET("/commentaire/getByProduit", handlers.GetAllComsProduit)
+		api.GET("/commentaire/getByClient", handlers.GetAllComsClient)
+		api.DELETE("/commentaire/delete", handlers.DeleteCommentaire)
+		api.PUT("/commentaire/update", handlers.UpdateCommentaire)
+
 		/*
 		   api.DELETE("/user/delete", handlers.DeleteUser)
 
