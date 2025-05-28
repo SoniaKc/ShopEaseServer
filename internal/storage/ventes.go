@@ -133,7 +133,7 @@ func GetAllVentesBoutique(loginBoutique string) (map[string]interface{}, error) 
 			"total":       total,
 			"date_vente":  dateVente,
 			"statut":      statut,
-			"client":      idClient,
+			"idClient":    idClient,
 		}
 
 		transactions[idTransaction] = append(transactions[idTransaction], transactionItem)
