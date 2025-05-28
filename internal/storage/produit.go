@@ -57,7 +57,7 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 	}
 	defer rows.Close()
 
-	var adresse []map[string]interface{}
+	var produits []map[string]interface{}
 	for rows.Next() {
 		var nom string
 		var categories string
@@ -67,7 +67,7 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 		if err := rows.Scan(&nom, &categories, &reduction, &prix); err != nil {
 			return nil, err
 		}
-		adresse = append(adresse, map[string]interface{}{
+		produits = append(produits, map[string]interface{}{
 			"login_boutique": loginBoutique,
 			"nom":            nom,
 			"categories":     categories,
@@ -76,7 +76,7 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 			"description":    description,
 		})
 	}
-	return adresse, nil
+	return produits, nil
 }
 
 func DeleteProduit(login_boutique string, nom string) error {

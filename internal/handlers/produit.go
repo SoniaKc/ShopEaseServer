@@ -76,13 +76,14 @@ func GetAllProduit(c *gin.Context) {
 		return
 	}
 
-	if len(produits) == 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Aucun produit",
-			"data":    []interface{}{},
-		})
-		return
-	}
+	/*
+		if len(produits) == 0 {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Aucun produit",
+				"data":    []interface{}{},
+			})
+			return
+		}*/
 
 	c.JSON(http.StatusOK, produits)
 }
