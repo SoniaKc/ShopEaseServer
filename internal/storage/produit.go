@@ -51,7 +51,7 @@ func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 }
 
 func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT nom, categories, reduction, prix, description FROM produits WHERE login = $1", loginBoutique)
+	rows, err := DB.Query("SELECT nom, categories, reduction, prix, description FROM produits WHERE login_boutique = $1", loginBoutique)
 	if err != nil {
 		return nil, err
 	}
