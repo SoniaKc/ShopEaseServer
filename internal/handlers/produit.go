@@ -70,20 +70,19 @@ func GetAllProduit(c *gin.Context) {
 		return
 	}
 
-	produits, err := storage.GetAllAdresse(loginBoutique)
+	produits, err := storage.GetAllProduit(loginBoutique)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	/*
-		if len(produits) == 0 {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "Aucun produit",
-				"data":    []interface{}{},
-			})
-			return
-		}*/
+	if len(produits) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Aucun produit",
+			"data":    []interface{}{},
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, produits)
 }
