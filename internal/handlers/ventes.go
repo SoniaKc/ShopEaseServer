@@ -33,11 +33,11 @@ func GetAllTransaction(c *gin.Context) {
 		return
 	}
 
-	transactions, err := storage.GetAllVentesClient(idClient)
+	transactions, err := storage.GetAllTransaction(idClient)
 	if err != nil {
 		if strings.Contains(err.Error(), "aucune transaction") {
 			c.JSON(http.StatusOK, gin.H{
-				"error": "Le paramètre 'idClient' est requis",
+				"data": "aucune transaction",
 			})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{

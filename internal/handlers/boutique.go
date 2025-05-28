@@ -24,7 +24,6 @@ func AddBoutique(c *gin.Context) {
 }
 
 func GetBoutique(c *gin.Context) {
-	//var req models.GetBoutiqueRequest
 	login := c.Query("login")
 	if login == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "paramètre 'login' requis"})
