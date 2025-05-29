@@ -62,7 +62,7 @@ func GetAllTransaction(idTransaction string) ([]map[string]interface{}, error) {
 
 func GetAllVentesClient(idClient string) (map[string][]map[string]interface{}, error) {
 	rows, err := DB.Query(
-		"SELECT login_boutique, nom_produit, idProduit, nom_adresse, nom_paiement, quantite, total, date_vente, statut FROM ventes WHERE idClient = $1 ORDER BY idTransaction, date_vente DESC",
+		"SELECT login_boutique, nom_produit, nom_adresse, nom_paiement, quantite, total, date_vente, statut FROM ventes WHERE idClient = $1 ORDER BY idTransaction, date_vente DESC",
 		idClient)
 	if err != nil {
 		return nil, fmt.Errorf("erreur lors de la requête: %v", err)
