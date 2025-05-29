@@ -16,7 +16,7 @@ func AddVente(c *gin.Context) {
 		return
 	}
 
-	if err := storage.AddVente(req.IdTransaction, req.LoginBoutique, req.NomProduit, req.IdClient, req.Quantite, req.Total, req.Date_vente, req.Statut); err != nil {
+	if err := storage.AddVente(req.IdTransaction, req.LoginBoutique, req.NomProduit, req.IdClient, req.NomAdresse, req.NomPaiement, req.Quantite, req.Total, req.Date_vente, req.Statut); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
