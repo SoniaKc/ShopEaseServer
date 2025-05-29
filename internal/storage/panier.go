@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"shop-ease-server/internal/models"
 )
 
-func AddPanier(loginBoutique string, nomProduit string, idClient string, quantite int) error {
+func AddPanier(loginBoutique string, nomProduit string, idClient string, quantite string) error {
 	var count int
 	err := DB.QueryRow("SELECT * FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&count)
 
@@ -23,19 +24,24 @@ func AddPanier(loginBoutique string, nomProduit string, idClient string, quantit
 	return errInsert
 }
 
-func GetQteInPanier(loginBoutique string, nomProduit string, idClient string) (int, error) {
-	var quantite int
+func GetQteInPanier(loginBoutique string, nomProduit string, idClient string) (*models.Panier, error) {
+	var panier models.Panier
 
-	err := DB.QueryRow("SELECT quantite FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&quantite)
+	err := DB.QueryRow("SELECT quantite FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(
+		&panier.LoginBoutique,
+		&panier.NomProduit,
+		&panier.IdClient,
+		&panier.Quantite,
+	)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return 0, fmt.Errorf("cet article n'est pas dans ce panier")
+			return nil, fmt.Errorf("cet article n'est pas dans ce panier")
 		}
-		return -1, fmt.Errorf("erreur lors de la récupération de la quantite dans le panier: %v", err)
+		return nil, fmt.Errorf("erreur lors de la récupération de la quantite dans le panier: %v", err)
 	}
 
-	return quantite, nil
+	return &panier, nil
 }
 
 func GetFullPanier(idClient string) ([]map[string]interface{}, error) {
@@ -49,7 +55,7 @@ func GetFullPanier(idClient string) ([]map[string]interface{}, error) {
 	for rows.Next() {
 		var loginBoutique string
 		var nomProduit string
-		var quantite int
+		var quantite string
 		if err := rows.Scan(&loginBoutique, &nomProduit, &quantite); err != nil {
 			return nil, err
 		}
@@ -81,8 +87,8 @@ func DeletePanier(loginBoutique string, nomProduit string, idClient string) erro
 	return nil
 }
 
-func UpdateQteInPanier(loginBoutique string, nomProduit string, idClient string, quantite int) error {
-	if quantite == 0 {
+func UpdateQteInPanier(loginBoutique string, nomProduit string, idClient string, quantite string) error {
+	if quantite == "0" {
 		return DeletePanier(loginBoutique, nomProduit, idClient)
 	}
 

@@ -18,15 +18,7 @@ func AddPanier(c *gin.Context) {
 		return
 	}
 
-	quantite, err := strconv.Atoi(req.Quantite)
-	if err != nil || quantite <= 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "La quantité doit être un nombre positif",
-		})
-		return
-	}
-
-	err = storage.AddPanier(req.LoginBoutique, req.NomProduit, req.IdClient, quantite)
+	err := storage.AddPanier(req.LoginBoutique, req.NomProduit, req.IdClient, req.Quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -47,12 +39,12 @@ func GetQteInPanier(c *gin.Context) {
 		return
 	}
 
-	quantite, err := storage.GetQteInPanier(loginBoutique, nomProduit, idClient)
+	panier, err := storage.GetQteInPanier(loginBoutique, nomProduit, idClient)
 	if err != nil {
 		if strings.Contains(err.Error(), "n'est pas dans ce panier") {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error":   err.Error(),
-				"details": fmt.Sprintf("Produit %s non trouvé dans le panier du client %s", loginBoutique, nomProduit, idClient),
+				"details": fmt.Sprintf("Produit non trouvé dans le panier du client %s", idClient),
 			})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -63,7 +55,7 @@ func GetQteInPanier(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, quantite)
+	c.JSON(http.StatusOK, panier.Quantite)
 }
 
 func GetFullPanier(c *gin.Context) {
@@ -132,7 +124,7 @@ func UpdateQteInPanier(c *gin.Context) {
 		return
 	}
 
-	err = storage.UpdateQteInPanier(req.LoginBoutique, req.NomProduit, req.IdClient, quantite)
+	err = storage.UpdateQteInPanier(req.LoginBoutique, req.NomProduit, req.IdClient, req.Quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Erreur lors de la mise à jour du panier",
