@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"shop-ease-server/internal/mailer"
 	"shop-ease-server/internal/models"
 	"shop-ease-server/internal/storage"
 	"strings"
@@ -21,6 +23,10 @@ func AddClient(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"AddClient": "Succeeded to create a new user"})
+
+	if err := mailer.SendWelcomeEmail(req.Email, req.Prenom); err != nil {
+		log.Println("Erreur d'envoi de l'email :", err)
+	}
 }
 
 func GetClient(c *gin.Context) {
