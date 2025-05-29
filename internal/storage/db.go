@@ -113,32 +113,34 @@ func InitPostgres() error {
 		return err
 	}
 
-	/*_, err = DB.Exec(`
+	_, err = DB.Exec(`
 	DROP TABLE IF EXISTS panier`)
 	if err != nil {
 		return err
-	}*/
+	}
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS panier (
-        idProduit TEXT NOT NULL,
+        login_boutique TEXT NOT NULL,
+        nom_produit TEXT NOT NULL,
         idClient TEXT NOT NULL,
         quantite INTEGER NOT NULL,
-        PRIMARY KEY(idProduit, idClient)
+        PRIMARY KEY(login_boutique, nom_produit, idClient)
     )`)
 	if err != nil {
 		return err
 	}
 
-	/*_, err = DB.Exec(`
+	_, err = DB.Exec(`
 	DROP TABLE IF EXISTS favoris`)
 	if err != nil {
 		return err
-	}*/
+	}
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS favoris (
-        idProduit TEXT NOT NULL,
+        login_boutique TEXT NOT NULL,
+        nom_produit TEXT NOT NULL,
         idClient TEXT NOT NULL,
-		PRIMARY KEY(idProduit, idClient)
+		PRIMARY KEY(login_boutique, nom_produit, idClient)
     )`)
 	if err != nil {
 		return err

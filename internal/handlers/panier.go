@@ -12,12 +12,13 @@ import (
 
 func AddPanier(c *gin.Context) {
 	idClient := c.Query("idClient")
-	idProduit := c.Query("idProduit")
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
 	quantiteStr := c.Query("quantite")
 
-	if idClient == "" || idProduit == "" || quantiteStr == "" {
+	if idClient == "" || loginBoutique == "" || nomProduit == "" || quantiteStr == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient', 'idProduit' et 'quantite' requis",
+			"error": "Paramètres 'idClient', 'login_boutique', 'nom_produit' et 'quantite' requis",
 		})
 		return
 	}
@@ -30,7 +31,7 @@ func AddPanier(c *gin.Context) {
 		return
 	}
 
-	err = storage.AddPanier(idProduit, idClient, quantite)
+	err = storage.AddPanier(loginBoutique, nomProduit, idClient, quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -40,22 +41,23 @@ func AddPanier(c *gin.Context) {
 }
 
 func GetQteInPanier(c *gin.Context) {
-	idProduit := c.Query("idProduit")
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
 	idClient := c.Query("idClient")
 
-	if idProduit == "" || idClient == "" {
+	if loginBoutique == "" || nomProduit == "" || idClient == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Les paramètres 'idProduit' et 'idClient' sont requis",
 		})
 		return
 	}
 
-	quantite, err := storage.GetQteInPanier(idProduit, idClient)
+	quantite, err := storage.GetQteInPanier(loginBoutique, nomProduit, idClient)
 	if err != nil {
 		if strings.Contains(err.Error(), "n'est pas dans ce panier") {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error":   err.Error(),
-				"details": fmt.Sprintf("Produit %s non trouvé dans le panier du client %s", idProduit, idClient),
+				"details": fmt.Sprintf("Produit %s non trouvé dans le panier du client %s", loginBoutique, nomProduit, idClient),
 			})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -98,16 +100,17 @@ func GetFullPanier(c *gin.Context) {
 
 func DeletePanier(c *gin.Context) {
 	idClient := c.Query("idClient")
-	idProduit := c.Query("idProduit")
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
 
-	if idClient == "" || idProduit == "" {
+	if idClient == "" || loginBoutique == "" || nomProduit == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Paramètres 'idClient' et 'idProduit' requis",
 		})
 		return
 	}
 
-	err := storage.DeletePanier(idProduit, idClient)
+	err := storage.DeletePanier(loginBoutique, nomProduit, idClient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Erreur lors de la suppression du produit",
@@ -121,12 +124,13 @@ func DeletePanier(c *gin.Context) {
 
 func UpdateQteInPanier(c *gin.Context) {
 	idClient := c.Query("idClient")
-	idProduit := c.Query("idProduit")
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
 	quantiteStr := c.Query("quantite")
 
-	if idClient == "" || idProduit == "" || quantiteStr == "" {
+	if idClient == "" || loginBoutique == "" || nomProduit == "" || quantiteStr == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient', 'idProduit' et 'quantite' requis",
+			"error": "Paramètres 'idClient', 'login_boutique', 'nom_produit' et 'quantite' requis",
 		})
 		return
 	}
@@ -139,7 +143,7 @@ func UpdateQteInPanier(c *gin.Context) {
 		return
 	}
 
-	err = storage.UpdateQteInPanier(idProduit, idClient, quantite)
+	err = storage.UpdateQteInPanier(loginBoutique, nomProduit, idClient, quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Erreur lors de la mise à jour du panier",

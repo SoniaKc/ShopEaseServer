@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-func AddPanier(idProduit string, idClient string, quantite int) error {
+func AddPanier(loginBoutique string, nomProduit string, idClient string, quantite int) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM panier WHERE idProduit = $1 AND idClient = $2", idProduit, idClient).Scan(&count)
+	err := DB.QueryRow("SELECT * FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("erreur lors de la vérification du panier: %v", err)
@@ -18,15 +18,15 @@ func AddPanier(idProduit string, idClient string, quantite int) error {
 		return errors.New("un panier avec ce produit existe déjà pour ce client")
 	}
 
-	_, errInsert := DB.Exec("INSERT INTO panier (idProduit, idClient, quantite) VALUES ($1, $2, $3)", idProduit, idClient, quantite)
+	_, errInsert := DB.Exec("INSERT INTO panier (login_boutique, nom_produit, idClient, quantite) VALUES ($1, $2, $3, $4)", loginBoutique, nomProduit, idClient, quantite)
 
 	return errInsert
 }
 
-func GetQteInPanier(idProduit string, idClient string) (int, error) {
+func GetQteInPanier(loginBoutique string, nomProduit string, idClient string) (int, error) {
 	var quantite int
 
-	err := DB.QueryRow("SELECT quantite FROM panier WHERE idProduit = $1 AND idClient = $2", idProduit, idClient).Scan(&quantite)
+	err := DB.QueryRow("SELECT quantite FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&quantite)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -39,7 +39,7 @@ func GetQteInPanier(idProduit string, idClient string) (int, error) {
 }
 
 func GetFullPanier(idClient string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT idProduit, quantite FROM panier WHERE idClient = $1", idClient)
+	rows, err := DB.Query("SELECT login_boutique, nom_produit, quantite FROM panier WHERE idClient = $1", idClient)
 	if err != nil {
 		return nil, err
 	}
@@ -47,21 +47,23 @@ func GetFullPanier(idClient string) ([]map[string]interface{}, error) {
 
 	var panier []map[string]interface{}
 	for rows.Next() {
-		var idProduit string
+		var loginBoutique string
+		var nomProduit string
 		var quantite int
-		if err := rows.Scan(&idProduit, &quantite); err != nil {
+		if err := rows.Scan(&loginBoutique, &nomProduit, &quantite); err != nil {
 			return nil, err
 		}
 		panier = append(panier, map[string]interface{}{
-			"idProduit": idProduit,
-			"quantite":  quantite,
+			"login_boutique": loginBoutique,
+			"nom_produit":    nomProduit,
+			"quantite":       quantite,
 		})
 	}
 	return panier, nil
 }
 
-func DeletePanier(idProduit string, idClient string) error {
-	result, err := DB.Exec("DELETE FROM panier WHERE idProduit = $1 AND idClient = $2", idProduit, idClient)
+func DeletePanier(loginBoutique string, nomProduit string, idClient string) error {
+	result, err := DB.Exec("DELETE FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient)
 
 	if err != nil {
 		return fmt.Errorf("failed to delete panier row: %v", err)
@@ -79,13 +81,13 @@ func DeletePanier(idProduit string, idClient string) error {
 	return nil
 }
 
-func UpdateQteInPanier(idProduit string, idClient string, quantite int) error {
+func UpdateQteInPanier(loginBoutique string, nomProduit string, idClient string, quantite int) error {
 	if quantite == 0 {
-		return DeletePanier(idProduit, idClient)
+		return DeletePanier(loginBoutique, nomProduit, idClient)
 	}
 
 	_, err := DB.Exec(`
-        UPDATE panier SET quantite = $1 WHERE idProduit = $2 AND idClient = $3`,
-		quantite, idProduit, idClient)
+        UPDATE panier SET quantite = $1 WHERE login_boutique = $2 AND nom_produit = $3 AND idClient = $4`,
+		quantite, loginBoutique, nomProduit, idClient)
 	return err
 }

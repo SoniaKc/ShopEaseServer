@@ -5,9 +5,9 @@ import (
 	"fmt"
 )
 
-func AddFavori(idProduit string, idClient string) error {
+func AddFavori(loginBoutique string, nomProduit string, idClient string) error {
 	var count int
-	err := DB.QueryRow("SELECT COUNT(*) FROM favoris WHERE idProduit = $1 AND idClient = $2", idProduit, idClient).Scan(&count)
+	err := DB.QueryRow("SELECT COUNT(*) FROM favoris WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("erreur lors de la vérification du panier: %v", err)
@@ -17,7 +17,7 @@ func AddFavori(idProduit string, idClient string) error {
 		return errors.New("ce favori existe déjà pour ce client")
 	}
 
-	_, errInsert := DB.Exec("INSERT INTO favoris (idProduit, idClient) VALUES ($1, $2)", idProduit, idClient)
+	_, errInsert := DB.Exec("INSERT INTO favoris (login_boutique, nom_produit, idClient) VALUES ($1, $2, $3)", loginBoutique, nomProduit, idClient)
 
 	return errInsert
 }
@@ -44,8 +44,8 @@ func GetAllFavoris(idClient string) ([]map[string]interface{}, error) {
 	return favoris, nil
 }
 
-func DeleteFavoris(idProduit string, idClient string) error {
-	result, err := DB.Exec("DELETE FROM favoris WHERE idProduit = $1 AND idClient = $2", idProduit, idClient)
+func DeleteFavoris(loginBoutique string, nomProduit string, idClient string) error {
+	result, err := DB.Exec("DELETE FROM favoris WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient)
 
 	if err != nil {
 		return fmt.Errorf("failed to delete favori row: %v", err)
