@@ -9,7 +9,7 @@ import (
 
 func AddPanier(loginBoutique string, nomProduit string, idClient string, quantite string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&count)
+	err := DB.QueryRow("SELECT COUNT(*) FROM panier WHERE login_boutique = $1 AND nom_produit = $2 AND idClient = $3", loginBoutique, nomProduit, idClient).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("erreur lors de la vérification du panier: %v", err)

@@ -113,11 +113,11 @@ func InitPostgres() error {
 		return err
 	}
 
-	_, err = DB.Exec(`
+	/*_, err = DB.Exec(`
 	  DROP TABLE IF EXISTS panier`)
 	if err != nil {
 		return err
-	}
+	}*/
 	_, err = DB.Exec(`
     CREATE TABLE IF NOT EXISTS panier (
         login_boutique TEXT NOT NULL,
