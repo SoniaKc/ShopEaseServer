@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"shop-ease-server/internal/models"
 	"shop-ease-server/internal/storage"
 	"strconv"
 	"strings"
@@ -11,19 +12,13 @@ import (
 )
 
 func AddPanier(c *gin.Context) {
-	idClient := c.Query("idClient")
-	loginBoutique := c.Query("login_boutique")
-	nomProduit := c.Query("nom_produit")
-	quantiteStr := c.Query("quantite")
-
-	if idClient == "" || loginBoutique == "" || nomProduit == "" || quantiteStr == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient', 'login_boutique', 'nom_produit' et 'quantite' requis",
-		})
+	var req models.AddPanierRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
 		return
 	}
 
-	quantite, err := strconv.Atoi(quantiteStr)
+	quantite, err := strconv.Atoi(req.Quantite)
 	if err != nil || quantite <= 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "La quantité doit être un nombre positif",
@@ -31,7 +26,7 @@ func AddPanier(c *gin.Context) {
 		return
 	}
 
-	err = storage.AddPanier(loginBoutique, nomProduit, idClient, quantite)
+	err = storage.AddPanier(req.LoginBoutique, req.NomProduit, req.IdClient, quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -123,19 +118,13 @@ func DeletePanier(c *gin.Context) {
 }
 
 func UpdateQteInPanier(c *gin.Context) {
-	idClient := c.Query("idClient")
-	loginBoutique := c.Query("login_boutique")
-	nomProduit := c.Query("nom_produit")
-	quantiteStr := c.Query("quantite")
-
-	if idClient == "" || loginBoutique == "" || nomProduit == "" || quantiteStr == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient', 'login_boutique', 'nom_produit' et 'quantite' requis",
-		})
+	var req models.UpdatePanierRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
 		return
 	}
 
-	quantite, err := strconv.Atoi(quantiteStr)
+	quantite, err := strconv.Atoi(req.Quantite)
 	if err != nil || quantite < 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "La quantité doit être un nombre positif ou nul",
@@ -143,7 +132,7 @@ func UpdateQteInPanier(c *gin.Context) {
 		return
 	}
 
-	err = storage.UpdateQteInPanier(loginBoutique, nomProduit, idClient, quantite)
+	err = storage.UpdateQteInPanier(req.LoginBoutique, req.NomProduit, req.IdClient, quantite)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Erreur lors de la mise à jour du panier",

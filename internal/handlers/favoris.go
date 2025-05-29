@@ -2,24 +2,20 @@ package handlers
 
 import (
 	"net/http"
+	"shop-ease-server/internal/models"
 	"shop-ease-server/internal/storage"
 
 	"github.com/gin-gonic/gin"
 )
 
 func AddFavori(c *gin.Context) {
-	idClient := c.Query("idClient")
-	loginBoutique := c.Query("login_boutique")
-	nomProduit := c.Query("nom_produit")
-
-	if idClient == "" || loginBoutique == "" || nomProduit == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient', 'login_boutique' et 'nom_produit' requis",
-		})
+	var req models.AddFavorisRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Bad request": err.Error()})
 		return
 	}
 
-	if err := storage.AddFavori(loginBoutique, nomProduit, idClient); err != nil {
+	if err := storage.AddFavori(req.LoginBoutique, req.NomProduit, req.IdClient); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
