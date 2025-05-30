@@ -11,6 +11,7 @@ type AddBoutiqueRequest struct {
 	Siege_social        string `json:"siege_social"`
 	Pays_enregistrement string `json:"pays_enregistrement"`
 	Iban                string `json:"iban"`
+	Image               []byte `json:"image"`
 }
 
 type GetBoutiqueRequest struct {
@@ -28,6 +29,7 @@ type Boutique struct {
 	Siege_social        string `json:"siege_social"`
 	Pays_enregistrement string `json:"pays_enregistrement"`
 	Iban                string `json:"iban"`
+	Image               []byte `json:"image"`
 }
 
 type UpdateBoutiqueRequest struct {
@@ -41,4 +43,5 @@ type UpdateBoutiqueRequest struct {
 	Siege_social        string `json:"siege_social,omitempty"`
 	Pays_enregistrement string `json:"pays_enregistrement,omitempty"`
 	Iban                string `json:"iban,omitempty"`
+	Image               []byte `json:"image,omitempty"`
 }

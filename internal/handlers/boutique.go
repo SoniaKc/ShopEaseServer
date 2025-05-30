@@ -16,7 +16,7 @@ func AddBoutique(c *gin.Context) {
 		return
 	}
 
-	if err := storage.AddBoutique(req.Login, req.Password, req.Nom, req.Email, req.Telephone, req.Siret, req.Forme_juridique, req.Siege_social, req.Pays_enregistrement, req.Iban); err != nil {
+	if err := storage.AddBoutique(req.Login, req.Password, req.Nom, req.Email, req.Telephone, req.Siret, req.Forme_juridique, req.Siege_social, req.Pays_enregistrement, req.Iban, req.Image); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -87,6 +87,9 @@ func UpdateBoutique(c *gin.Context) {
 	}
 	if req.Iban != "" {
 		updates["iban"] = req.Iban
+	}
+	if req.Image != nil {
+		updates["image"] = req.Image
 	}
 
 	err := storage.UpdateBoutique(req.Login, updates)

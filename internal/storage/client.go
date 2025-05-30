@@ -89,10 +89,6 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 		if !allowedFields[field] {
 			continue
 		}
-		/*
-			if strVal, ok := value.(string); ok && strVal == "" {
-				continue
-			}*/
 
 		if value == nil {
 			continue

@@ -10,16 +10,10 @@ import (
 )
 
 func AddBoutique(login string, password string, nom string, email string, telephone string,
-	siret string, forme_juridique string, siege_social string, pays_enregistrement string, iban string) error {
+	siret string, forme_juridique string, siege_social string, pays_enregistrement string, iban string, image []byte) error {
 
 	var count int
-	err := DB.QueryRow("SELECT * FROM boutiques WHERE login = $1 OR email = $2", login, email).Scan(&count)
-
-	if err == sql.ErrNoRows {
-		_, errInsert := DB.Exec("INSERT INTO boutiques (login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-			login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban)
-		return errInsert
-	}
+	err := DB.QueryRow("SELECT COUNT(*) FROM boutiques WHERE login = $1 OR email = $2", login, email).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("error while checking boutiques: %v", err)
@@ -29,8 +23,8 @@ func AddBoutique(login string, password string, nom string, email string, teleph
 		return errors.New("boutique already exists with this login or email")
 	}
 
-	_, errInsert := DB.Exec("INSERT INTO boutiques (login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-		login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban)
+	_, errInsert := DB.Exec("INSERT INTO boutiques (login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+		login, password, nom, email, telephone, siret, forme_juridique, siege_social, pays_enregistrement, iban, image)
 
 	return errInsert
 }
@@ -49,6 +43,7 @@ func GetBoutique(login string) (*models.Boutique, error) {
 		&boutique.Siege_social,
 		&boutique.Pays_enregistrement,
 		&boutique.Iban,
+		&boutique.Image,
 	)
 
 	if err != nil {
@@ -99,14 +94,11 @@ func UpdateBoutique(login string, updates map[string]interface{}) error {
 		"siege_social":        true,
 		"pays_enregistrement": true,
 		"iban":                true,
+		"image":               true,
 	}
 
 	for field, value := range updates {
 		if !allowedFields[field] {
-			continue
-		}
-
-		if strVal, ok := value.(string); ok && strVal == "" {
 			continue
 		}
 
