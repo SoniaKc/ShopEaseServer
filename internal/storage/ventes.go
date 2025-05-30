@@ -24,7 +24,7 @@ func AddVente(idTransaction string, LoginBoutique string, NomProduit string, idC
 }
 
 func GetAllTransaction(idTransaction string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT login_boutique, nom_produit, idClient, nom_adresse, nom_paiement, quantite, total, date_vente, statut FROM ventes WHERE idTransaction& = $1", idTransaction)
+	rows, err := DB.Query("SELECT login_boutique, nom_produit, idClient, nom_adresse, nom_paiement, quantite, total, date_vente, statut FROM ventes WHERE idTransaction = $1", idTransaction)
 	if err != nil {
 		return nil, err
 	}
