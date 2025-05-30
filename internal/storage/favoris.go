@@ -23,7 +23,7 @@ func AddFavori(loginBoutique string, nomProduit string, idClient string) error {
 }
 
 func GetAllFavoris(idClient string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT idProduit, idClient FROM favoris WHERE idClient = $1", idClient)
+	rows, err := DB.Query("SELECT login_boutique, nom_produit, idClient FROM favoris WHERE idClient = $1", idClient)
 	if err != nil {
 		return nil, err
 	}
@@ -31,14 +31,16 @@ func GetAllFavoris(idClient string) ([]map[string]interface{}, error) {
 
 	var favoris []map[string]interface{}
 	for rows.Next() {
-		var idProduit string
+		var loginBoutique string
+		var nomProduit string
 		var idClient string
-		if err := rows.Scan(&idProduit, &idClient); err != nil {
+		if err := rows.Scan(&loginBoutique, &nomProduit, &idClient); err != nil {
 			return nil, err
 		}
 		favoris = append(favoris, map[string]interface{}{
-			"idProduit": idProduit,
-			"idClient":  idClient,
+			"login_boutique": loginBoutique,
+			"nom_produit":    nomProduit,
+			"idClient":       idClient,
 		})
 	}
 	return favoris, nil
