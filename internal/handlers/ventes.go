@@ -24,16 +24,16 @@ func AddVente(c *gin.Context) {
 }
 
 func GetAllTransaction(c *gin.Context) {
-	idClient := c.Query("idClient")
+	idTransaction := c.Query("idTransaction")
 
-	if idClient == "" {
+	if idTransaction == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Le paramètre 'idClient' est requis",
+			"error": "Le paramètre 'idTransaction' est requis",
 		})
 		return
 	}
 
-	transactions, err := storage.GetAllTransaction(idClient)
+	transactions, err := storage.GetAllTransaction(idTransaction)
 	if err != nil {
 		if strings.Contains(err.Error(), "aucune transaction") {
 			c.JSON(http.StatusOK, gin.H{
