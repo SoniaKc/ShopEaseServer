@@ -16,7 +16,7 @@ func AddProduit(c *gin.Context) {
 		return
 	}
 
-	if err := storage.AddProduit(req.LoginBoutique, req.Nom, req.Categories, req.Reduction, req.Prix, req.Description); err != nil {
+	if err := storage.AddProduit(req.LoginBoutique, req.Nom, req.Categories, req.Reduction, req.Prix, req.Description, req.Image); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -40,24 +40,6 @@ func GetProduit(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, produit)
-
-	/*
-	   id, err := strconv.Atoi(req)
-	   if err != nil {
-	       c.JSON(http.StatusBadRequest, gin.H{"Bad request": "ID invalide"})
-	       return
-	   }
-
-	   produit, err := storage.GetProduit(id)
-	   if err != nil {
-	       if strings.Contains(err.Error(), "non trouvé") {
-	           c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-	       } else {
-	           c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	       }
-	       return
-	   }
-	   c.JSON(http.StatusOK, produit)*/
 }
 
 func GetAllProduit(c *gin.Context) {
@@ -128,6 +110,9 @@ func UpdateProduit(c *gin.Context) {
 	}
 	if req.Description != "" {
 		updates["description"] = req.Description
+	}
+	if req.Image != nil {
+		updates["image"] = req.Image
 	}
 
 	err := storage.UpdateProduit(req.LoginBoutique, req.Nom, updates)

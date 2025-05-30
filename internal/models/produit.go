@@ -7,6 +7,7 @@ type AddProduitRequest struct {
 	Reduction     string `json:"reduction"`
 	Prix          string `json:"prix" binding:"required"`
 	Description   string `json:"description" binding:"required"`
+	Image         []byte `json:"image"`
 }
 
 type GetProduitRequest struct {
@@ -21,6 +22,7 @@ type Produit struct {
 	Reduction     string `json:"reduction"`
 	Prix          string `json:"prix"`
 	Description   string `json:"description"`
+	Image         []byte `json:"image"`
 }
 
 type UpdateProduitRequest struct {
@@ -30,4 +32,5 @@ type UpdateProduitRequest struct {
 	Reduction     string `json:"reduction,omitempty"`
 	Prix          string `json:"prix,omitempty"`
 	Description   string `json:"description,omitempty"`
+	Image         []byte `json:"image,omitempty"`
 }

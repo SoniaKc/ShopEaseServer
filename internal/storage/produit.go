@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func AddProduit(login_boutique string, nom string, categories string, reduction string, prix string, description string) error {
+func AddProduit(login_boutique string, nom string, categories string, reduction string, prix string, description string, image []byte) error {
 	var count int
 	err := DB.QueryRow("SELECT COUNT(*) FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom).Scan(&count)
 
@@ -22,8 +22,8 @@ func AddProduit(login_boutique string, nom string, categories string, reduction 
 	}
 
 	_, errInsert := DB.Exec(
-		"INSERT INTO produits (login_boutique, nom, categories, reduction, prix, description) VALUES ($1, $2, $3, $4, $5, $6)",
-		login_boutique, nom, categories, reduction, prix, description)
+		"INSERT INTO produits (login_boutique, nom, categories, reduction, prix, description, image) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		login_boutique, nom, categories, reduction, prix, description, image)
 
 	return errInsert
 }
@@ -38,6 +38,7 @@ func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 		&produit.Reduction,
 		&produit.Prix,
 		&produit.Description,
+		&produit.Image,
 	)
 
 	if err != nil {
@@ -51,7 +52,7 @@ func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 }
 
 func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
-	rows, err := DB.Query("SELECT nom, categories, reduction, prix, description FROM produits WHERE login_boutique = $1", loginBoutique)
+	rows, err := DB.Query("SELECT nom, categories, reduction, prix, description, image FROM produits WHERE login_boutique = $1", loginBoutique)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,8 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 		var reduction string
 		var prix string
 		var description string
-		if err := rows.Scan(&nom, &categories, &reduction, &prix, &description); err != nil {
+		var image []byte
+		if err := rows.Scan(&nom, &categories, &reduction, &prix, &description, &image); err != nil {
 			return nil, err
 		}
 		produits = append(produits, map[string]interface{}{
@@ -74,6 +76,7 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 			"reduction":      reduction,
 			"prix":           prix,
 			"description":    description,
+			"image":          image,
 		})
 	}
 	return produits, nil
@@ -108,19 +111,15 @@ func UpdateProduit(login_boutique string, nom string, updates map[string]interfa
 	i := 1
 
 	allowedFields := map[string]bool{
-		//"nom":         true,
 		"categories":  true,
 		"reduction":   true,
 		"prix":        true,
 		"description": true,
+		"image":       true,
 	}
 
 	for field, value := range updates {
 		if !allowedFields[field] {
-			continue
-		}
-
-		if strVal, ok := value.(string); ok && strVal == "" {
 			continue
 		}
 
@@ -139,11 +138,11 @@ func UpdateProduit(login_boutique string, nom string, updates map[string]interfa
 	query = strings.TrimSuffix(query, ", ")
 	query += " WHERE login_boutique = $" + strconv.Itoa(i) + " AND nom = $" + strconv.Itoa(i+1)
 	params = append(params, login_boutique, nom)
-
-	fmt.Printf("Generated SQL: %s\n", query)
-	for i, param := range params {
-		fmt.Printf("$%d = %v (type: %T)\n", i+1, param, param)
-	}
+	/*
+		fmt.Printf("Generated SQL: %s\n", query)
+		for i, param := range params {
+			fmt.Printf("$%d = %v (type: %T)\n", i+1, param, param)
+		}*/
 
 	result, err := DB.Exec(query, params...)
 	if err != nil {
