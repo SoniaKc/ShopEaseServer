@@ -28,7 +28,8 @@ func InitPostgres() error {
         prenom TEXT NOT NULL,
         email TEXT NOT NULL,
         date_naissance TEXT NOT NULL,
-        telephone TEXT
+        telephone TEXT,
+        image BYTEA
     )`)
 	if err != nil {
 		return err
@@ -45,7 +46,8 @@ func InitPostgres() error {
         forme_juridique TEXT NOT NULL,
         siege_social TEXT NOT NULL,
         pays_enregistrement TEXT NOT NULL,
-        iban TEXT NOT NULL
+        iban TEXT NOT NULL,
+        image BYTEA
     )`)
 	if err != nil {
 		return err
@@ -107,6 +109,7 @@ func InitPostgres() error {
         reduction TEXT,
         prix TEXT NOT NULL,
         description TEXT NOT NULL,
+        image BYTEA,
         PRIMARY KEY(login_boutique, nom)
     )`)
 	if err != nil {

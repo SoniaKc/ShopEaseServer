@@ -9,14 +9,9 @@ import (
 	"strings"
 )
 
-func AddClient(login string, password string, nom string, prenom string, email string, date_naissance string, telephone string) error {
+func AddClient(login string, password string, nom string, prenom string, email string, date_naissance string, telephone string, image []byte) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM clients WHERE login = $1 OR email = $2", login, email).Scan(&count)
-
-	if err == sql.ErrNoRows {
-		_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)", login, password, nom, prenom, email, date_naissance, telephone)
-		return errInsert
-	}
+	err := DB.QueryRow("SELECT COUNT(*) FROM clients WHERE login = $1 OR email = $2", login, email).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("error while checking users: %v", err)
@@ -24,7 +19,7 @@ func AddClient(login string, password string, nom string, prenom string, email s
 	if count > 0 {
 		return errors.New("user already exist, or email already used")
 	}
-	_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)", login, password, nom, prenom, email, date_naissance, telephone)
+	_, errInsert := DB.Exec("INSERT INTO clients (login, password, nom, prenom, email, date_naissance, telephone, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", login, password, nom, prenom, email, date_naissance, telephone, image)
 	return errInsert
 }
 
@@ -39,6 +34,7 @@ func GetClient(login string) (*models.Client, error) {
 		&client.Email,
 		&client.DateNaissance,
 		&client.Telephone,
+		&client.Image,
 	)
 
 	if err != nil {
@@ -86,16 +82,17 @@ func UpdateClient(login string, updates map[string]interface{}) error {
 		"email":          true,
 		"date_naissance": true,
 		"telephone":      true,
+		"image":          true,
 	}
 
 	for field, value := range updates {
 		if !allowedFields[field] {
 			continue
 		}
-
-		if strVal, ok := value.(string); ok && strVal == "" {
-			continue
-		}
+		/*
+			if strVal, ok := value.(string); ok && strVal == "" {
+				continue
+			}*/
 
 		if value == nil {
 			continue

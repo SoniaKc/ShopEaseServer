@@ -18,7 +18,7 @@ func AddClient(c *gin.Context) {
 		return
 	}
 
-	if err := storage.AddClient(req.Login, req.Password, req.Nom, req.Prenom, req.Email, req.Date_naissance, req.Telephone); err != nil {
+	if err := storage.AddClient(req.Login, req.Password, req.Nom, req.Prenom, req.Email, req.Date_naissance, req.Telephone, req.Image); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -84,6 +84,9 @@ func UpdateClient(c *gin.Context) {
 	}
 	if req.Telephone != "" {
 		updates["telephone"] = req.Telephone
+	}
+	if req.Image != nil {
+		updates["image"] = req.Image
 	}
 
 	err := storage.UpdateClient(req.Login, updates)

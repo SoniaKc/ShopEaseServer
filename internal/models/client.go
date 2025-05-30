@@ -8,6 +8,7 @@ type AddClientRequest struct {
 	Email          string `json:"email" binding:"required"`
 	Date_naissance string `json:"date_naissance" binding:"required"`
 	Telephone      string `json:"telephone"`
+	Image          []byte `json:"image"`
 }
 
 type GetClientRequest struct {
@@ -22,6 +23,7 @@ type Client struct {
 	Email         string `json:"email"`
 	DateNaissance string `json:"date_naissance"`
 	Telephone     string `json:"telephone"`
+	Image         []byte `json:"image"`
 }
 
 type UpdateClientRequest struct {
@@ -32,4 +34,5 @@ type UpdateClientRequest struct {
 	Email         string `json:"email,omitempty"`
 	DateNaissance string `json:"date_naissance,omitempty"`
 	Telephone     string `json:"telephone,omitempty"`
+	Image         []byte `json:"image,omitempty"`
 }
