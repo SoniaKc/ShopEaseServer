@@ -67,7 +67,7 @@ func GetAllProduits() ([]map[string]interface{}, error) {
 		var prix string
 		var description string
 		var image []byte
-		if err := rows.Scan(&nom, &categories, &reduction, &prix, &description, &image); err != nil {
+		if err := rows.Scan(&loginBoutique, &nom, &categories, &reduction, &prix, &description, &image); err != nil {
 			return nil, err
 		}
 		produits = append(produits, map[string]interface{}{
