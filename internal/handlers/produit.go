@@ -42,6 +42,15 @@ func GetProduit(c *gin.Context) {
 	c.JSON(http.StatusOK, produit)
 }
 
+func GetAllProduits(c *gin.Context) {
+	produit, err := storage.GetAllProduits()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, produit)
+}
+
 func GetPopulaires(c *gin.Context) {
 	produit, err := storage.GetPopulaires()
 	if err != nil {
@@ -51,7 +60,7 @@ func GetPopulaires(c *gin.Context) {
 	c.JSON(http.StatusOK, produit)
 }
 
-func GetAllProduit(c *gin.Context) {
+func GetAllProduitByBoutique(c *gin.Context) {
 	loginBoutique := c.Query("login_boutique")
 
 	if loginBoutique == "" {
@@ -61,7 +70,7 @@ func GetAllProduit(c *gin.Context) {
 		return
 	}
 
-	produits, err := storage.GetAllProduit(loginBoutique)
+	produits, err := storage.GetAllProduitByBoutique(loginBoutique)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

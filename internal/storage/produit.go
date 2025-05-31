@@ -51,7 +51,39 @@ func GetProduit(login_boutique string, nom string) (*models.Produit, error) {
 	return &produit, nil
 }
 
-func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
+func GetAllProduits() ([]map[string]interface{}, error) {
+	rows, err := DB.Query("SELECT login_boutique, nom, categories, reduction, prix, description, image FROM produits")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var produits []map[string]interface{}
+	for rows.Next() {
+		var loginBoutique string
+		var nom string
+		var categories string
+		var reduction string
+		var prix string
+		var description string
+		var image []byte
+		if err := rows.Scan(&nom, &categories, &reduction, &prix, &description, &image); err != nil {
+			return nil, err
+		}
+		produits = append(produits, map[string]interface{}{
+			"login_boutique": loginBoutique,
+			"nom":            nom,
+			"categories":     categories,
+			"reduction":      reduction,
+			"prix":           prix,
+			"description":    description,
+			"image":          image,
+		})
+	}
+	return produits, nil
+}
+
+func GetAllProduitByBoutique(loginBoutique string) ([]map[string]interface{}, error) {
 	rows, err := DB.Query("SELECT nom, categories, reduction, prix, description, image FROM produits WHERE login_boutique = $1", loginBoutique)
 	if err != nil {
 		return nil, err

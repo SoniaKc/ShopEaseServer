@@ -51,7 +51,8 @@ func SetupRouter() *gin.Engine {
 
 		api.POST("/produit/add", handlers.AddProduit)
 		api.GET("/produit/get", handlers.GetProduit)
-		api.GET("/produit/getAll", handlers.GetAllProduit)
+		api.GET("/produit/getAllProduit", handlers.GetAllProduits)
+		api.GET("/produit/getAllByBoutique", handlers.GetAllProduitByBoutique)
 		api.GET("/produit/getPopulaires", handlers.GetPopulaires)
 		api.DELETE("/produit/delete", handlers.DeleteProduit)
 		api.PUT("/produit/update", handlers.UpdateProduit)
