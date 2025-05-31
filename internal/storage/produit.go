@@ -82,6 +82,66 @@ func GetAllProduit(loginBoutique string) ([]map[string]interface{}, error) {
 	return produits, nil
 }
 
+func GetPopulaires() ([]map[string]interface{}, error) {
+	query := `
+        SELECT 
+            p.login_boutique,
+            p.nom,
+            p.categories,
+            p.reduction,
+            p.prix,
+            p.description,
+            p.image,
+            COUNT(c.*) AS nb_commentaires,
+            AVG(CAST(c.note AS FLOAT)) AS moyenne_note
+        FROM 
+            produits p
+        JOIN 
+            commentaires c ON c.login_boutique = p.login_boutique AND c.nom_produit = p.nom
+        GROUP BY 
+            p.login_boutique, p.nom, p.categories, p.reduction, p.prix, p.description, p.image
+        ORDER BY 
+            nb_commentaires DESC
+        LIMIT 15;
+    `
+
+	rows, err := DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var produits []map[string]interface{}
+	for rows.Next() {
+		var loginBoutique string
+		var nom string
+		var categories string
+		var reduction string
+		var prix string
+		var description string
+		var image []byte
+		var nbCommentaires int
+		var moyenneNote float64
+
+		err := rows.Scan(&loginBoutique, &nom, &categories, &reduction, &prix, &description, &image, &nbCommentaires, &moyenneNote)
+		if err != nil {
+			return nil, err
+		}
+
+		produits = append(produits, map[string]interface{}{
+			"login_boutique": loginBoutique,
+			"nom":            nom,
+			"categories":     categories,
+			"reduction":      reduction,
+			"prix":           prix,
+			"description":    description,
+			"image":          image,
+		})
+	}
+
+	return produits, nil
+}
+
 func DeleteProduit(login_boutique string, nom string) error {
 	result, err := DB.Exec("DELETE FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom)
 
