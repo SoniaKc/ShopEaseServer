@@ -13,7 +13,7 @@ func main() {
 		log.Fatal("PostGre init failed:", err)
 	}
 
-	router := routes.SetupRouter() // Initialisation du routeur
+	router := routes.SetupRouter()
 
 	port := os.Getenv("PORT")
 	if port == "" {

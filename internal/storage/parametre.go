@@ -11,14 +11,7 @@ import (
 
 func AddParametre(login string, typeLogin string, langue string, cookies string, notifications string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM parametres WHERE login = $1 AND type = $2", login, typeLogin).Scan(&count)
-
-	if err == sql.ErrNoRows {
-		_, errInsert := DB.Exec(
-			"INSERT INTO parametres (login, type, langue, cookies, notifications) VALUES ($1, $2, $3, $4, $5)",
-			login, typeLogin, langue, cookies, notifications)
-		return errInsert
-	}
+	err := DB.QueryRow("SELECT COUNT(*) FROM parametres WHERE login = $1 AND type = $2", login, typeLogin).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("error while checking parameters: %v", err)

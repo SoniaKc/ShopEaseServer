@@ -11,14 +11,7 @@ import (
 
 func AddPaiement(login string, nom_carte string, nom_personne_carte string, numero string, cvc string, date_expiration string) error {
 	var count int
-	err := DB.QueryRow("SELECT * FROM paiements WHERE login = $1 AND nom_carte = $2", login, nom_carte).Scan(&count)
-
-	if err == sql.ErrNoRows {
-		_, errInsert := DB.Exec(
-			"INSERT INTO paiements (login, nom_carte, nom_personne_carte, numero, cvc, date_expiration) VALUES ($1, $2, $3, $4, $5, $6)",
-			login, nom_carte, nom_personne_carte, numero, cvc, date_expiration)
-		return errInsert
-	}
+	err := DB.QueryRow("SELECT COUNT(*) FROM paiements WHERE login = $1 AND nom_carte = $2", login, nom_carte).Scan(&count)
 
 	if err != nil {
 		return fmt.Errorf("error while checking paiements: %v", err)
@@ -166,10 +159,10 @@ func UpdatePaiement(login string, nomCarte string, updates map[string]interface{
 	query += " WHERE login = $" + strconv.Itoa(i) + " AND nom_carte = $" + strconv.Itoa(i+1)
 	params = append(params, login, nomCarte)
 
-	fmt.Printf("Generated SQL: %s\n", query)
+	/*fmt.Printf("Generated SQL: %s\n", query)
 	for i, param := range params {
 		fmt.Printf("$%d = %v (type: %T)\n", i+1, param, param)
-	}
+	}*/
 
 	result, err := DB.Exec(query, params...)
 	if err != nil {

@@ -109,7 +109,7 @@ func GetAllVentesClient(idClient string) (map[string][]map[string]interface{}, e
 
 func GetAllVentesBoutique(loginBoutique string) (map[string][]map[string]interface{}, error) {
 	rows, err := DB.Query(
-		"SELECT idTransaction, nom_produit, idClient, nom_adresse, quantite, total, date_vente, statut FROM ventes WHERE login_boutique = $1 ORDER BY idTransaction, date_vente DESC",
+		"SELECT idTransaction, nom_produit, idClient, nom_adresse, quantite, total, date_vente, statut FROM ventes WHERE login_boutique = $1 ORDER BY date_vente DESC",
 		loginBoutique)
 
 	if err != nil {
@@ -117,7 +117,6 @@ func GetAllVentesBoutique(loginBoutique string) (map[string][]map[string]interfa
 	}
 	defer rows.Close()
 
-	//result := make(map[string]interface{})
 	transactions := make(map[string][]map[string]interface{})
 
 	for rows.Next() {
@@ -146,17 +145,12 @@ func GetAllVentesBoutique(loginBoutique string) (map[string][]map[string]interfa
 			"statut":      statut,
 		}
 
-		//transactions[idTransaction] = append(transactions[idTransaction], transactionItem)
 		transactions[idTransaction] = append(transactions[idTransaction], transactionItem)
 	}
 
 	if len(transactions) == 0 {
 		return nil, fmt.Errorf("aucune transaction trouvée pour cette boutique")
 	}
-
-	//result["boutique"] = loginBoutique
-	//result["total_transactions"] = len(transactions)
-	//result["transactions"] = transactions
 
 	return transactions, nil
 }
