@@ -180,7 +180,7 @@ func GetProduitsRecherche(recherche string) ([]map[string]interface{}, error) {
 	}
 
 	query := `SELECT login_boutique, nom, categories, reduction, prix, description, image FROM produits
-        WHERE LOWER(nom) LIKE '%' || LOWER($1) || '%'`
+        WHERE unaccent(LOWER(nom)) LIKE '%' || unaccent(LOWER($1)) || '%'`
 	rows, err := DB.Query(query, recherche)
 	if err != nil {
 		return nil, err
