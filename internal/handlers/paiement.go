@@ -88,6 +88,24 @@ func DeletePaiement(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"DeletePaiement": "Paiement deleted successfully"})
 }
 
+func DeletePaiementByClient(c *gin.Context) {
+	login := c.Query("login")
+
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Le paramètre 'login' est requis dans l'URL",
+		})
+		return
+	}
+
+	err := storage.DeletePaiementByClient(login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"DeletePaiementByClient": "Paiement deleted successfully"})
+}
+
 func UpdatePaiement(c *gin.Context) {
 	var req models.UpdatePaiementRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

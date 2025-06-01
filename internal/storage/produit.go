@@ -224,6 +224,35 @@ func DeleteProduit(login_boutique string, nom string) error {
 		return fmt.Errorf("produit not found")
 	}
 
+	DeleteCommentaireByProduit(login_boutique, nom)
+	DeleteFavorisByProduit(login_boutique, nom)
+	DeletePanierByProduit(login_boutique, nom)
+
+	return nil
+}
+
+func DeleteProduitsByBoutique(login_boutique string) error {
+	rows, err := DB.Query("SELECT nom FROM produits WHERE login_boutique = $1", login_boutique)
+	if err != nil {
+		return fmt.Errorf("failed to fetch produits: %v", err)
+	}
+	defer rows.Close()
+
+	var nomsProduits []string
+	for rows.Next() {
+		var nom string
+		if err := rows.Scan(&nom); err != nil {
+			return fmt.Errorf("failed to scan produit: %v", err)
+		}
+		nomsProduits = append(nomsProduits, nom)
+	}
+
+	for _, nom := range nomsProduits {
+		if err := DeleteProduit(login_boutique, nom); err != nil {
+			fmt.Printf("Erreur lors de la suppression du produit %s: %v\n", nom, err)
+		}
+	}
+
 	return nil
 }
 

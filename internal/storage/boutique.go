@@ -72,6 +72,9 @@ func DeleteBoutique(login string) error {
 		return fmt.Errorf("boutique not found")
 	}
 
+	DeleteProduitsByBoutique(login)
+	DeleteParametre(login, "boutique")
+
 	return nil
 }
 

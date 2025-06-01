@@ -63,6 +63,12 @@ func DeleteClient(login string) error {
 		return fmt.Errorf("client not found")
 	}
 
+	DeleteAdresseByClient(login)
+	DeletePaiementByClient(login)
+	DeleteFavorisByClient(login)
+	DeletePanierByClient(login)
+	DeleteParametre(login, "client")
+
 	return nil
 }
 

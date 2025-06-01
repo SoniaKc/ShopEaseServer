@@ -117,6 +117,24 @@ func DeleteProduit(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"DeleteProduit": "Produit deleted successfully"})
 }
 
+func DeleteProduitsByBoutique(c *gin.Context) {
+	loginBoutique := c.Query("login_boutique")
+
+	if loginBoutique == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Le paramètre 'loginBoutique' est requis dans l'URL",
+		})
+		return
+	}
+
+	err := storage.DeleteProduitsByBoutique(loginBoutique)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"DeleteProduit": "Produit deleted successfully"})
+}
+
 func UpdateProduit(c *gin.Context) {
 	var req models.UpdateProduitRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

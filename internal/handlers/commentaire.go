@@ -80,6 +80,25 @@ func DeleteCommentaire(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"DeleteCommentaire": "Commentaire deleted successfully"})
 }
 
+func DeleteCommentaireByProduit(c *gin.Context) {
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
+
+	if loginBoutique == "" || nomProduit == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Les paramètres 'login_boutique', 'nom_produit' et 'idClient' sont requis dans l'URL",
+		})
+		return
+	}
+
+	err := storage.DeleteCommentaireByProduit(loginBoutique, nomProduit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"DeleteCommentaireByProduit": "Commentaires deleted successfully"})
+}
+
 func UpdateCommentaire(c *gin.Context) {
 	var req models.UpdateCommentaireRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

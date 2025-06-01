@@ -64,3 +64,41 @@ func DeleteFavoris(loginBoutique string, nomProduit string, idClient string) err
 
 	return nil
 }
+
+func DeleteFavorisByProduit(loginBoutique string, nomProduit string) error {
+	result, err := DB.Exec("DELETE FROM favoris WHERE login_boutique = $1 AND nom_produit = $2", loginBoutique, nomProduit)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete favori row: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("favori row not found")
+	}
+
+	return nil
+}
+
+func DeleteFavorisByClient(idClient string) error {
+	result, err := DB.Exec("DELETE FROM favoris WHERE idClient = $1", idClient)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete favori row: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("favori row not found")
+	}
+
+	return nil
+}

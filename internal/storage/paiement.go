@@ -106,6 +106,25 @@ func DeletePaiement(login string, nomCarte string) error {
 	return nil
 }
 
+func DeletePaiementByClient(login string) error {
+	result, err := DB.Exec("DELETE FROM paiements WHERE login = $1", login)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete paiement: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("paiement not found")
+	}
+
+	return nil
+}
+
 func UpdatePaiement(login string, nomCarte string, updates map[string]interface{}) error {
 	if len(updates) == 0 {
 		return nil

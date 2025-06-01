@@ -92,12 +92,57 @@ func DeletePanier(c *gin.Context) {
 
 	if idClient == "" || loginBoutique == "" || nomProduit == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient' et 'idProduit' requis",
+			"error": "Paramètres 'idClient', 'login_boutique' et 'nom_produit' requis",
 		})
 		return
 	}
 
 	err := storage.DeletePanier(loginBoutique, nomProduit, idClient)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Erreur lors de la suppression du produit",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"DeletePanier": "Succeeded to delete panier"})
+}
+
+func DeletePanierByProduit(c *gin.Context) {
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
+
+	if loginBoutique == "" || nomProduit == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètres 'login_boutique' et 'nom_produit' requis",
+		})
+		return
+	}
+
+	err := storage.DeletePanierByProduit(loginBoutique, nomProduit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Erreur lors de la suppression du produit",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"DeletePanierByProduit": "Succeeded to delete panier"})
+}
+
+func DeletePanierByClient(c *gin.Context) {
+	idClient := c.Query("idClient")
+
+	if idClient == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètres'idClient' requis",
+		})
+		return
+	}
+
+	err := storage.DeletePanierByClient(idClient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Erreur lors de la suppression du produit",

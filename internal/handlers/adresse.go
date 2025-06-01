@@ -88,6 +88,24 @@ func DeleteAdresse(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"DeleteAdresse": "Adresse deleted successfully"})
 }
 
+func DeleteAdresseByClient(c *gin.Context) {
+	login := c.Query("login")
+
+	if login == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Le paramètre 'login' est requis dans l'URL",
+		})
+		return
+	}
+
+	err := storage.DeleteAdresseByClient(login)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"DeleteAdresseByClient": "Adresse deleted successfully"})
+}
+
 func UpdateAdresse(c *gin.Context) {
 	var req models.UpdateAdresseRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

@@ -87,6 +87,44 @@ func DeletePanier(loginBoutique string, nomProduit string, idClient string) erro
 	return nil
 }
 
+func DeletePanierByProduit(loginBoutique string, nomProduit string) error {
+	result, err := DB.Exec("DELETE FROM panier WHERE login_boutique = $1 AND nom_produit = $2", loginBoutique, nomProduit)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete panier row: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("panier row not found")
+	}
+
+	return nil
+}
+
+func DeletePanierByClient(idClient string) error {
+	result, err := DB.Exec("DELETE FROM panier WHERE idClient = $1", idClient)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete panier row: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("panier row not found")
+	}
+
+	return nil
+}
+
 func UpdateQteInPanier(loginBoutique string, nomProduit string, idClient string, quantite string) error {
 	if quantite == "0" {
 		return DeletePanier(loginBoutique, nomProduit, idClient)

@@ -57,7 +57,7 @@ func DeleteFavoris(c *gin.Context) {
 
 	if idClient == "" || loginBoutique == "" || nomProduit == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Paramètres 'idClient' et 'idProduit' requis",
+			"error": "Paramètres 'idClient', 'login_boutique' et 'nom_produit' requis",
 		})
 		return
 	}
@@ -72,4 +72,49 @@ func DeleteFavoris(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"DeleteFavori": "Succeeded to delete favori"})
+}
+
+func DeleteFavorisByProduit(c *gin.Context) {
+	loginBoutique := c.Query("login_boutique")
+	nomProduit := c.Query("nom_produit")
+
+	if loginBoutique == "" || nomProduit == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètres 'login_boutique' et 'u' requis",
+		})
+		return
+	}
+
+	err := storage.DeleteFavorisByProduit(loginBoutique, nomProduit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Erreur lors de la suppression du favori",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"DeleteFavoriByProduit": "Succeeded to delete favori"})
+}
+
+func DeleteFavorisByClient(c *gin.Context) {
+	idClient := c.Query("idClient")
+
+	if idClient == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Paramètre 'idClient' requis",
+		})
+		return
+	}
+
+	err := storage.DeleteFavorisByClient(idClient)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Erreur lors de la suppression du favori",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"DeleteFavoriByClient": "Succeeded to delete favori"})
 }

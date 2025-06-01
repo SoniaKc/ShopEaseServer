@@ -104,6 +104,25 @@ func DeleteAdresse(login string, nomAdresse string) error {
 	return nil
 }
 
+func DeleteAdresseByClient(login string) error {
+	result, err := DB.Exec("DELETE FROM adresses WHERE login = $1", login)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete adresse: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("adresse not found")
+	}
+
+	return nil
+}
+
 func UpdateAdresse(login string, nomAdresse string, updates map[string]interface{}) error {
 	if len(updates) == 0 {
 		return nil

@@ -98,6 +98,25 @@ func DeleteCommentaire(loginBoutique string, nomProduit string, idClient string)
 	return nil
 }
 
+func DeleteCommentaireByProduit(loginBoutique string, nomProduit string) error {
+	result, err := DB.Exec("DELETE FROM commentaires WHERE login_boutique = $1 AND nom_produit = $2", loginBoutique, nomProduit)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete commentaires: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("commentaire not found")
+	}
+
+	return nil
+}
+
 func UpdateCommentaire(loginBoutique string, nomProduit string, idClient string, updates map[string]interface{}) error {
 	if len(updates) == 0 {
 		return nil
