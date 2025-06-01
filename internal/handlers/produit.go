@@ -87,6 +87,17 @@ func GetAllProduitByBoutique(c *gin.Context) {
 	c.JSON(http.StatusOK, produits)
 }
 
+func GetProduitsRecherche(c *gin.Context) {
+	recherche := c.Query("recherche")
+
+	produit, err := storage.GetProduitsRecherche(recherche)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, produit)
+}
+
 func DeleteProduit(c *gin.Context) {
 	loginBoutique := c.Query("login_boutique")
 	nom := c.Query("nom")

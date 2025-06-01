@@ -174,6 +174,40 @@ func GetPopulaires() ([]map[string]interface{}, error) {
 	return produits, nil
 }
 
+func GetProduitsRecherche(recherche string) ([]map[string]interface{}, error) {
+	if recherche == "" {
+		return GetAllProduits()
+	}
+
+	query := `SELECT login_boutique, nom, categories, reduction, prix, description, image FROM produits
+        WHERE LOWER(nom) LIKE '%' || LOWER($1) || '%'`
+	rows, err := DB.Query(query, recherche)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var produits []map[string]interface{}
+	for rows.Next() {
+		var login_boutique, nom, categories, reduction, prix, description string
+		var image []byte
+		err := rows.Scan(&login_boutique, &nom, &categories, &reduction, &prix, &description, &image)
+		if err != nil {
+			return nil, err
+		}
+		produits = append(produits, map[string]interface{}{
+			"login_boutique": login_boutique,
+			"nom":            nom,
+			"categories":     categories,
+			"reduction":      reduction,
+			"prix":           prix,
+			"description":    description,
+			"image":          image,
+		})
+	}
+	return produits, nil
+}
+
 func DeleteProduit(login_boutique string, nom string) error {
 	result, err := DB.Exec("DELETE FROM produits WHERE login_boutique = $1 AND nom = $2", login_boutique, nom)
 
